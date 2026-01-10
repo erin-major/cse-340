@@ -73,6 +73,14 @@ nav {
   }
 }
 
+.hero {
+  display: grid;
+
+  picture {
+    margin: 0 auto;
+  }
+}
+
 @media screen and (min-width: 30rem) {
   #wrapper {
     width: 90%;
@@ -85,5 +93,15 @@ nav {
     body {
       background-image: url('../images/site/small_check.jpg');
     }
+
+    nav {
+      width: 98%;
+      margin: 0 auto;
+
+      ul {
+        margin-top: 0;
+      }
+    }
+
 }
 
