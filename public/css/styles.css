@@ -174,7 +174,7 @@ h2 {
   box-shadow: var(--dark-color) 0px 5px 15px;
   border-radius: 5px;
   max-width: 300px;
-  height: 350px;
+  height: 320px;
 }
 
 #inv-display img {
@@ -194,6 +194,10 @@ h2 {
   margin-top: auto;
 }
 
+.namePrice h2 {
+  font-size: 1rem;
+  margin: .5rem;
+}
 .namePrice a:hover {
   text-decoration: underline;
 }
