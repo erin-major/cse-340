@@ -42,7 +42,7 @@ nav ul {
   padding: .5rem;
 }
 
-nav a {
+nav a{
   text-decoration: none;
   color: var(--neutral-color);
 }
@@ -51,7 +51,7 @@ a:visited {
   color: var(--neutral-color);
 }
 
-nav li {
+nav li, #inv-display li {
   list-style-type: none;
 }
 
@@ -60,7 +60,7 @@ nav li {
   padding: 1rem;
 }
 
-#top-header a {
+#top-header a, .namePrice a {
   text-decoration: none;
   color: var(--dark-color);
 }
@@ -81,7 +81,7 @@ nav li {
   grid-row-start: 1;
 }
 
-.hero h1 {
+.hero h1, main h1 {
   margin-left: 1rem;
 }
 
@@ -156,6 +156,98 @@ h2 {
   color: var(--dark-color);
 }
 
+#inv-display {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  grid-row-start: 2;
+  align-items: center;
+  justify-content: space-evenly;
+  max-width: 90%;
+}
+
+#inv-display li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid var(--dark-color);
+  box-shadow: var(--dark-color) 0px 5px 15px;
+  border-radius: 5px;
+  max-width: 300px;
+  height: 320px;
+}
+
+#inv-display img {
+  width: 100%;
+}
+
+#inv-display hr {
+  border: none;
+  height: 5px;
+  background-color: var(--secondary-color);
+}
+
+.namePrice {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 1rem;
+  margin-top: auto;
+}
+
+.namePrice h2 {
+  font-size: 1rem;
+  margin: .5rem;
+}
+.namePrice a:hover {
+  text-decoration: underline;
+}
+
+.namePrice span {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+#inv-detail-display {
+  width: 95%;
+  margin: 0 auto;
+}
+
+#inv-detail-display img {
+  width: 100%;
+  max-width: 650px;
+  height: auto;
+  margin: 0 auto;
+}
+
+#inv-detail-display h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  text-decoration: underline;
+}
+
+#inv-detail-display p {
+  margin: 1.5rem 1rem;
+  padding: 1rem;
+  font-size: 1.2rem;
+}
+
+#inv-detail-display p:nth-child(even) {
+  background-color: var(--neutral-color);
+}
+
+.error-message {
+  margin-left: 2rem;
+  font-size: 1.2rem;
+}
+
+footer a:visited {
+  color: var(--dark-color);
+}
+
+footer {
+  margin: 2rem 1rem 1rem 1rem;
+}
+
 @media screen and (min-width: 30rem) {
   #wrapper {
     width: 90%;
@@ -182,19 +274,40 @@ h2 {
     left: 3rem;
   }
 
-  main {
-    grid-template-columns: 1fr 1fr;
-  }
-
   .hero {
     grid-column: 1 / span 2;
   }
 
   .upgrades-list {
     grid-column-start: 1;
+    margin-left: 1rem;
   }
 
   .reviews {
     grid-column-start: 2;
   }
+}
+
+@media screen and (min-width: 60rem) {
+  #inv-detail-display {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      align-items: center;
+      column-gap: 1rem;
+    }
+  
+    #inv-detail-display img {
+      grid-column-start: 1;
+      grid-row: 1 / span 5;
+    }
+  
+    #inv-detail-display h2,
+    #inv-detail-display p {
+      grid-column-start: 2;
+    }
+
+    #inv-detail-display p {
+      margin: 0;
+      font-size: 1.2rem;
+    }
 }

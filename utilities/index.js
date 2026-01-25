@@ -36,14 +36,14 @@ Util.buildClassificationGrid = async function(data){
       grid += '<li>'
       grid +=  '<a href="../../inv/detail/'+ vehicle.inv_id 
       + '" title="View ' + vehicle.inv_make + ' '+ vehicle.inv_model 
-      + 'details"><img src="' + vehicle.inv_thumbnail 
+      + ' Details"><img src="' + vehicle.inv_thumbnail 
       +'" alt="Image of '+ vehicle.inv_make + ' ' + vehicle.inv_model 
-      +' on CSE Motors" /></a>'
+      +' on CSE Motors" ></a>'
       grid += '<div class="namePrice">'
-      grid += '<hr />'
+      grid += '<hr>'
       grid += '<h2>'
       grid += '<a href="../../inv/detail/' + vehicle.inv_id +'" title="View ' 
-      + vehicle.inv_make + ' ' + vehicle.inv_model + ' details">' 
+      + vehicle.inv_make + ' ' + vehicle.inv_model + ' Details">' 
       + vehicle.inv_make + ' ' + vehicle.inv_model + '</a>'
       grid += '</h2>'
       grid += '<span>$' 
@@ -52,6 +52,31 @@ Util.buildClassificationGrid = async function(data){
       grid += '</li>'
     })
     grid += '</ul>'
+  } else { 
+    grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
+  }
+  return grid
+}
+
+/* **************************************
+* Build the details view HTML
+* ************************************ */
+Util.buildDetailsGrid = async function(data){
+  let grid
+  if(data){
+    grid = '<div id="inv-detail-display">'
+    grid += '<img src="' + data.inv_image + '" alt="Image of '+ data.inv_make + ' ' + data.inv_model + '">'
+    grid += '<h2>' + data.inv_make + ' ' + data.inv_model + ' Details</h2>'
+    grid += '<p><b>Price:</b> ' + new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(data.inv_price) + '</p>'
+    grid += '<p><b>Description:</b> ' + data.inv_description + '</p>'
+    grid += '<p><b>Color:</b> ' + data.inv_color + '</p>'
+    grid += '<p><b>Miles:</b> ' + data.inv_miles.toLocaleString('en-US') + '</p>'
+    grid += '</div>'
   } else { 
     grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
   }
