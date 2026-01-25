@@ -38,9 +38,9 @@ Util.buildClassificationGrid = async function(data){
       + '" title="View ' + vehicle.inv_make + ' '+ vehicle.inv_model 
       + ' Details"><img src="' + vehicle.inv_thumbnail 
       +'" alt="Image of '+ vehicle.inv_make + ' ' + vehicle.inv_model 
-      +' on CSE Motors" /></a>'
+      +' on CSE Motors" ></a>'
       grid += '<div class="namePrice">'
-      grid += '<hr />'
+      grid += '<hr>'
       grid += '<h2>'
       grid += '<a href="../../inv/detail/' + vehicle.inv_id +'" title="View ' 
       + vehicle.inv_make + ' ' + vehicle.inv_model + ' Details">' 
@@ -65,7 +65,7 @@ Util.buildDetailsGrid = async function(data){
   let grid
   if(data){
     grid = '<div id="inv-detail-display">'
-    grid += '<img src="' + data.inv_image + '" alt="Image of '+ data.inv_make + ' ' + data.inv_model + ' on CSE Motors">'
+    grid += '<img src="' + data.inv_image + '" alt="Image of '+ data.inv_make + ' ' + data.inv_model + '">'
     grid += '<h2>' + data.inv_make + ' ' + data.inv_model + ' Details</h2>'
     grid += '<p><b>Price:</b> ' + new Intl.NumberFormat('en-US', {
       style: 'currency',

@@ -207,6 +207,34 @@ h2 {
   font-size: 1.5rem;
 }
 
+#inv-detail-display {
+  width: 95%;
+  margin: 0 auto;
+}
+
+#inv-detail-display img {
+  width: 100%;
+  max-width: 650px;
+  height: auto;
+  margin: 0 auto;
+}
+
+#inv-detail-display h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  text-decoration: underline;
+}
+
+#inv-detail-display p {
+  margin: 1.5rem 1rem;
+  padding: 1rem;
+  font-size: 1.2rem;
+}
+
+#inv-detail-display p:nth-child(even) {
+  background-color: var(--neutral-color);
+}
+
 footer {
   margin-left: 1rem;
 }
@@ -249,4 +277,28 @@ footer {
   .reviews {
     grid-column-start: 2;
   }
+}
+
+@media screen and (min-width: 60rem) {
+  #inv-detail-display {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      align-items: center;
+      column-gap: 1rem;
+    }
+  
+    #inv-detail-display img {
+      grid-column-start: 1;
+      grid-row: 1 / span 5;
+    }
+  
+    #inv-detail-display h2,
+    #inv-detail-display p {
+      grid-column-start: 2;
+    }
+
+    #inv-detail-display p {
+      margin: 0;
+      font-size: 1.2rem;
+    }
 }
