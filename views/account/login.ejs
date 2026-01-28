@@ -4,7 +4,7 @@
     </h1>
     <% } else { res.redirect('/') } %>
 
-        <%# messages() %>
+        <%- messages() %>
 
             <div class="login-form">
                 <form>
@@ -16,5 +16,5 @@
                         required><br>
                     <input type="submit" value="Login">
                 </form>
-                <p>No account? <a href="account/registration">Sign-up</a></p>
+                <p>No account? <a href="/account/register">Sign-up</a></p>
             </div>

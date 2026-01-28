@@ -1,0 +1,22 @@
+<% if (title) { %>
+    <h1>
+        <%= title %>
+    </h1>
+    <% } else { res.redirect('/') } %>
+
+        <%- messages() %>
+
+            <div class="register-form">
+                <form>
+                    <label for="account_firstname">First Name:</label><br>
+                    <input type="text" id="account_firstname" name="account_firstname" placeholder="Enter First Name" required autocomplete="on" autofocus><br>
+                    <label for="account_lastname">Last Name:</label><br>
+                    <input type="text" id="account_lastname" name="account_lastname" placeholder="Enter Last Name" required autocomplete="on"><br>
+                    <label for="account_email">Email:</label><br>
+                    <input type="email" id="account_email" name="account_email" placeholder="Enter Email" required autocomplete="on"><br>
+                    <label for="account_password">Password:</label><br>
+                    <input type="password" id="account_password" name="account_password" placeholder="Enter Password" required minlength="12" pattern="(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{12,}"
+                      title="Password must be at least 12 characters and include 1 capital letter, 1 number, and 1 special character."><br>
+                    <input type="submit" value="Register">
+                </form>
+            </div>

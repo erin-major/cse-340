@@ -240,7 +240,7 @@ h2 {
   font-size: 1.2rem;
 }
 
-.login-form {
+.login-form, .register-form {
   margin: 0 auto;
   padding: 1rem;
   border: 2px solid var(--tertiary-color);
@@ -250,18 +250,18 @@ h2 {
   max-width: 600px;
 }
 
-.login-form form {
+.login-form form, .register-form form {
   display: grid;
   font-size: 1.1rem;
 }
 
-.login-form input[type="email"], .login-form input[type="password"] {
+.login-form input[type="email"], .login-form input[type="password"], .register-form input[type="email"], .register-form input[type="password"], .register-form input[type="text"] {
   padding: .5rem;
   border-radius: 5px;
   font-size: 1.1rem;
 }
 
-.login-form input[type="submit"] {
+.login-form input[type="submit"], .register-form input[type="submit"] {
   width: 25%;
   justify-self: end;
   padding: .5rem;
@@ -271,17 +271,25 @@ h2 {
   font-size: 1.1rem;
 }
 
-.login-form input[type="submit"]:hover, .login-form a:hover {
+.login-form input[type="submit"]:hover, .login-form a:hover, .register-form input[type="submit"]:hover {
   cursor: pointer;
 }
 
-.login-form label {
+.login-form label, .register-form label {
   font-weight: bold;
 }
 
 .login-form p {
   justify-self: center;
   margin: .5rem;
+}
+
+input:required {
+  border-bottom: 2px solid var(--primary-color);
+}
+
+input:required:valid, input:required:focus {
+  border-bottom: 2px solid black;
 }
 
 footer a:visited, .login-form a:visited {
