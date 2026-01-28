@@ -302,6 +302,16 @@ footer a:visited, .login-form a:visited {
   font-size: 0.9rem;
 }
 
+.notice {
+  margin: 0rem 0rem 1rem;
+}
+
+.notice li {
+  list-style-type: none;
+  color: var(--primary-color);
+  font-style: italic;
+}
+
 footer {
   margin: 2rem 1rem 1rem 1rem;
 }
