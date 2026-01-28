@@ -284,16 +284,22 @@ h2 {
   margin: .5rem;
 }
 
-input:required {
+input:required:invalid, input:focus:invalid {
   border-bottom: 2px solid var(--primary-color);
 }
 
-input:required:valid, input:required:focus {
+input:required:valid, input:focus:valid {
   border-bottom: 2px solid black;
 }
 
 footer a:visited, .login-form a:visited {
   color: var(--dark-color);
+}
+
+#pwdReq {
+  margin: 0 .5rem 1rem;
+  font-style: italic;
+  font-size: 0.9rem;
 }
 
 footer {
