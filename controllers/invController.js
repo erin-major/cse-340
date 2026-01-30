@@ -37,4 +37,21 @@ invCont.buildByInventoryId = async function (req, res, next) {
   })
 }
 
+/* ***************************
+ *  Build details by management view
+ * ************************** */
+invCont.buildManagementView = async function (req, res, next) {
+  const inventory_id = req.params.inventoryId
+  const data = await invModel.getDetailsByInventoryId(inventory_id)
+  const grid = await utilities.buildDetailsGrid(data)
+  let nav = await utilities.getNav()
+  const vehicleName = data.inv_year + " " + data.inv_make + " " + data.inv_model
+  res.render("./inventory/details", {
+    title: vehicleName,
+    nav,
+    grid,
+    errors: null
+  })
+}
+
 module.exports = invCont

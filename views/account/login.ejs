@@ -6,11 +6,21 @@
 
         <%- messages() %>
 
+         <% if (errors) { %>
+                <ul class="notice">
+                    <% errors.array().forEach(error=> { %>
+                        <li>
+                            <%= error.msg %>
+                        </li>
+                        <% }) %>
+                </ul>
+                <% } %>
+
             <div class="login-form">
-                <form>
+                <form action="/account/login" method="post">
                     <label for="account_email">Email:</label><br>
                     <input type="email" id="account_email" name="account_email" placeholder="Enter Email" required
-                        autofocus autocomplete="on"><br>
+                        autofocus autocomplete="on" value="<%= locals.account_email %>"><br>
                     <label for="account_password">Password:</label><br>
                     <input type="password" id="account_password" name="account_password" placeholder="Enter Password" required minlength="12" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
                       title="Password must be at least 12 characters and include 1 capital letter, 1 number, and 1 special character."><br>
