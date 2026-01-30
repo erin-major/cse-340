@@ -292,7 +292,7 @@ input:required:valid, input:focus:valid {
   border-bottom: 2px solid black;
 }
 
-footer a:visited, .login-form a:visited {
+footer a:visited, .login-form a:visited, .management:visited {
   color: var(--dark-color);
 }
 
@@ -310,6 +310,16 @@ footer a:visited, .login-form a:visited {
   list-style-type: none;
   color: var(--primary-color);
   font-style: italic;
+}
+
+.management {
+  margin-left: 2rem;
+  color: var(--dark-color);
+  font-size: 1.3rem;
+}
+
+.management:hover {
+  color: var(--secondary-color);
 }
 
 footer {
