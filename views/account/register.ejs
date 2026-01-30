@@ -20,13 +20,13 @@
                         <form action="/account/register" method="post">
                             <label for="account_firstname">First Name:</label><br>
                             <input type="text" id="account_firstname" name="account_firstname"
-                                placeholder="Enter First Name" required autocomplete="on" autofocus><br>
+                                placeholder="Enter First Name" required autocomplete="on" autofocus value="<%= locals.account_firstname %>"><br>
                             <label for="account_lastname">Last Name:</label><br>
                             <input type="text" id="account_lastname" name="account_lastname"
-                                placeholder="Enter Last Name" required autocomplete="on"><br>
+                                placeholder="Enter Last Name" required autocomplete="on" value="<%= locals.account_lastname %>"><br>
                             <label for="account_email">Email:</label><br>
                             <input type="email" id="account_email" name="account_email" placeholder="Enter Email"
-                                required autocomplete="on"><br>
+                                required autocomplete="on" value="<%= locals.account_email %>"><br>
                             <label for="account_password">Password:</label><br>
                             <input type="password" id="account_password" name="account_password"
                                 placeholder="Enter Password" required minlength="12"
