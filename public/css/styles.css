@@ -179,6 +179,7 @@ h2 {
 
 #inv-display img {
   width: 100%;
+  min-width: 200px;
 }
 
 #inv-display hr {
@@ -240,7 +241,7 @@ h2 {
   font-size: 1.2rem;
 }
 
-.login-form, .register-form, .classification-form {
+.login-form, .register-form, .classification-form, .inventory-form {
   margin: 0 auto;
   padding: 1rem;
   border: 2px solid var(--tertiary-color);
@@ -255,10 +256,11 @@ form {
   font-size: 1.1rem;
 }
 
-input[type="email"], input[type="password"], input[type="text"] {
+input[type="email"], input[type="password"], input[type="text"], input[type="number"], textarea, select {
   padding: .5rem;
   border-radius: 5px;
   font-size: 1.1rem;
+  margin-bottom: .7rem;
 }
 
 input[type="submit"] {
@@ -269,6 +271,7 @@ input[type="submit"] {
   font-family: var(--paragraph-font);
   border-radius: 20px;
   font-size: 1.1rem;
+  min-width: 180px;
 }
 
 input[type="submit"]:hover, .login-form a:hover {

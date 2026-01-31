@@ -88,7 +88,75 @@ invCont.addClassification = async function (req, res) {
     res.status(501).render("inventory/add-classification", {
       title: "Add Classification",
       nav,
-      errors: null,      
+      errors: null,
+      classification_name
+    })
+  }
+}
+
+/* ***************************
+ *  Build add inventory view
+ * ************************** */
+invCont.buildAddInventoryView = async function (req, res, next) {
+  let nav = await utilities.getNav()
+  const classificationList = await utilities.buildClassificationList()
+  res.render("./inventory/add-inventory", {
+    title: "Add Inventory",
+    nav,
+    classificationList,
+    errors: null
+  })
+}
+
+/* ****************************************
+*  Process add inventory
+* *************************************** */
+invCont.addInventory = async function (req, res) {
+  let nav = await utilities.getNav()
+  const { classification_id, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color } = req.body
+
+  const inventoryResult = await invModel.addInventory(
+    classification_id,
+    inv_make,
+    inv_model,
+    inv_year,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_miles,
+    inv_color
+  )
+
+  if (inventoryResult) {
+    req.flash(
+      "notice",
+      `Congratulations, you\'ve added the ${inv_make} ${inv_model} inventory item.`
+    )
+    let nav = await utilities.getNav()
+    res.status(201).render("inventory/management", {
+      title: "Management",
+      nav,
+      errors: null,
+    })
+  } else {
+    let classificationList = await utilities.buildClassificationList()
+    req.flash("notice", "Sorry, adding the inventory item failed.")
+    res.status(501).render("inventory/add-inventory", {
+      title: "Add Inventory",
+      nav,
+      errors: null,
+      classificationList,
+      classification_id,
+      inv_make,
+      inv_model,
+      inv_year,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_miles,
+      inv_color
     })
   }
 }
