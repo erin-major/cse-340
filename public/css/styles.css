@@ -179,6 +179,7 @@ h2 {
 
 #inv-display img {
   width: 100%;
+  min-width: 200px;
 }
 
 #inv-display hr {
@@ -240,7 +241,7 @@ h2 {
   font-size: 1.2rem;
 }
 
-.login-form, .register-form {
+.login-form, .register-form, .classification-form, .inventory-form {
   margin: 0 auto;
   padding: 1rem;
   border: 2px solid var(--tertiary-color);
@@ -250,38 +251,46 @@ h2 {
   max-width: 600px;
 }
 
-.login-form form, .register-form form {
+form {
   display: grid;
   font-size: 1.1rem;
 }
 
-.login-form input[type="email"], .login-form input[type="password"], .register-form input[type="email"], .register-form input[type="password"], .register-form input[type="text"] {
+input[type="email"], input[type="password"], input[type="text"], input[type="number"], textarea, select {
   padding: .5rem;
   border-radius: 5px;
   font-size: 1.1rem;
+  margin-bottom: .7rem;
 }
 
-.login-form input[type="submit"], .register-form input[type="submit"] {
-  width: 25%;
+input[type="submit"] {
+  width: 35%;
   justify-self: end;
   padding: .5rem;
   background-color: var(--background-color);
   font-family: var(--paragraph-font);
   border-radius: 20px;
   font-size: 1.1rem;
+  min-width: 180px;
 }
 
-.login-form input[type="submit"]:hover, .login-form a:hover, .register-form input[type="submit"]:hover {
+input[type="submit"]:hover, .login-form a:hover {
   cursor: pointer;
 }
 
-.login-form label, .register-form label {
+label {
   font-weight: bold;
 }
 
 .login-form p {
   justify-self: center;
   margin: .5rem;
+}
+
+.classification-form p {
+  font-style: italic;
+  font-size: 0.9rem;
+  margin-top: 0;
 }
 
 input:required:invalid, input:focus:invalid {
@@ -292,7 +301,7 @@ input:required:valid, input:focus:valid {
   border-bottom: 2px solid black;
 }
 
-footer a:visited, .login-form a:visited {
+footer a:visited, .login-form a:visited, .management:visited {
   color: var(--dark-color);
 }
 
@@ -310,6 +319,16 @@ footer a:visited, .login-form a:visited {
   list-style-type: none;
   color: var(--primary-color);
   font-style: italic;
+}
+
+.management {
+  margin-left: 2rem;
+  color: var(--dark-color);
+  font-size: 1.3rem;
+}
+
+.management:hover {
+  color: var(--secondary-color);
 }
 
 footer {

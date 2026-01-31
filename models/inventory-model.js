@@ -41,4 +41,54 @@ async function getDetailsByInventoryId(inventory_id) {
   }
 }
 
-module.exports = { getClassifications, getInventoryByClassificationId, getDetailsByInventoryId }
+/* *****************************
+*   Add new classification
+* *************************** */
+async function addClassification(classification_name) {
+  try {
+    const sql = "INSERT INTO classification (classification_name) VALUES ($1) RETURNING *"
+    return await pool.query(sql, [classification_name])
+  } catch (error) {
+    return error.message
+  }
+}
+
+/* **********************
+ *   Check for existing classification
+ * ********************* */
+async function checkExistingClassification(classification_name) {
+  try {
+    const sql = "SELECT * FROM classification WHERE classification_name = $1"
+    const classification = await pool.query(sql, [classification_name])
+    return classification.rowCount
+  } catch (error) {
+    return error.message
+  }
+}
+
+/* *****************************
+*   Add new inventory item
+* *************************** */
+async function addInventory(classification_id, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color) {
+  try {
+    const sql = "INSERT INTO inventory (classification_id, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *"
+    return await pool.query(sql, [classification_id,inv_make,inv_model,inv_year,inv_description,inv_image,inv_thumbnail,inv_price,inv_miles,inv_color])
+  } catch (error) {
+    return error.message
+  }
+}
+
+/* **********************
+ *   Check for existing inventory item
+ * ********************* */
+async function checkExistingInventory(inv_make, inv_model, inv_year) {
+  try {
+    const sql = "SELECT * FROM inventory WHERE inv_make = $1 AND inv_model = $2 AND inv_year = $3"
+    const inventory = await pool.query(sql, [inv_make, inv_model, inv_year])
+    return inventory.rowCount
+  } catch (error) {
+    return error.message
+  }
+}
+
+module.exports = { getClassifications, getInventoryByClassificationId, getDetailsByInventoryId, addClassification, checkExistingClassification, addInventory, checkExistingInventory }

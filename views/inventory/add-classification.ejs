@@ -1,0 +1,28 @@
+<% if (title) { %>
+    <h1>
+        <%= title %>
+    </h1>
+    <% } else { res.redirect('/') } %>
+
+        <%- messages() %>
+
+        <% if (errors) { %>
+            <ul class="notice">
+                <% errors.array().forEach(error=> { %>
+                    <li>
+                        <%= error.msg %>
+                    </li>
+                    <% }) %>
+            </ul>
+            <% } %>
+
+            <div class="classification-form">
+                <form action="/inv/add-classification" method="post">
+                    <label for="classification_name">Classification Name:</label><br>
+                    <p>Classification name cannot contain a space or special characters.</p>
+                    <input type="text" id="classification_name" name="classification_name" placeholder="Enter Classification Name" required
+                        autofocus pattern="^[A-Za-z ]+$"
+                        value="<%= locals.classification_name %>"><br>                   
+                    <input type="submit" value="Add Classification">
+                </form>
+            </div>
