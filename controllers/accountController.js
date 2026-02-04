@@ -31,10 +31,10 @@ async function buildRegister(req, res, next) {
 /* ****************************************
 *  Deliver account view
 * *************************************** */
-async function buildAccount(req, res, next) {
+async function buildAccountManagement(req, res, next) {
   let nav = await utilities.getNav()
-  res.render("account/account", {
-    title: "Account",
+  res.render("account/account-management", {
+    title: "Account Management",
     nav,
     errors: null
   })
@@ -130,4 +130,4 @@ async function accountLogin(req, res) {
   }
 }
 
-module.exports = { buildLogin, buildRegister, registerAccount, buildAccount, accountLogin }
+module.exports = { buildLogin, buildRegister, registerAccount, buildAccountManagement, accountLogin }
