@@ -331,6 +331,32 @@ footer a:visited, .login-form a:visited, .management:visited {
   color: var(--secondary-color);
 }
 
+#selectClass {
+  margin: 0 1.5rem;
+}
+
+#selectClassList {
+  max-width: 250px;
+  margin-left: 1.5rem;
+}
+
+#inventoryDisplay {
+  max-width: 500px;
+  margin-left: 1.5rem;
+}
+
+th, td {
+  padding: 5px;
+}
+
+#inventoryDisplay a {
+  color: var(--dark-color);
+}
+
+#inventoryDisplay a:hover {
+  color: var(--primary-color);
+}
+
 footer {
   margin: 2rem 1rem 1rem 1rem;
 }
