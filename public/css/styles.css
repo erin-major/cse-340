@@ -278,6 +278,10 @@ input[type="submit"]:hover, .login-form a:hover {
   cursor: pointer;
 }
 
+input[type="submit"]:disabled {
+  cursor: not-allowed;
+}
+
 label {
   font-weight: bold;
 }
