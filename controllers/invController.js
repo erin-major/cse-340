@@ -204,4 +204,81 @@ invCont.buildEditInventoryView = async function (req, res, next) {
   })
 }
 
+/* ****************************************
+*  Process update inventory
+* *************************************** */
+invCont.updateInventory = async function (req, res) {
+  let nav = await utilities.getNav()
+  const { inv_id, classification_id, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color } = req.body
+  const updateResult = await invModel.updateInventory(
+    inv_id,
+    inv_make,
+    inv_model,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_year,
+    inv_miles,
+    inv_color,
+    classification_id
+  )
+
+  if (updateResult) {
+    req.flash(
+      "notice",
+      `Congratulations, you\'ve updated the ${inv_make} ${inv_model} inventory item.`)
+    res.redirect("/inv/")
+  } else {
+    const itemName = `${inv_make} ${inv_model}`
+    let classificationList = await utilities.buildClassificationList(classification_id)
+    req.flash("notice", "Sorry, updating the inventory item failed.")
+    res.status(501).render("inventory/edit-inventory", {
+      title: "Edit Inventory - " + itemName,
+      nav,
+      errors: null,
+      classificationList: classificationList,
+      classification_id,
+      inv_make,
+      inv_model,
+      inv_year,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_miles,
+      inv_color,
+      inv_id
+    })
+  }
+}
+
+// /* ***************************
+//  *  Return Edit Inventory View
+//  * ************************** */
+// invCont.buildEditInventoryView = async function (req, res, next) {
+//   let nav = await utilities.getNav()
+//   const inventory_id = parseInt(req.params.inventoryId)
+//   const inventoryData = await invModel.getDetailsByInventoryId(inventory_id)
+//   const name = inventoryData.inv_make + " " + inventoryData.inv_model
+//   const classificationList = await utilities.buildClassificationList(inventoryData.classification_id)
+//   res.render("./inventory/edit-inventory", {
+//     title: "Edit Inventory - " + name,
+//     nav,
+//     classificationList: classificationList,
+//     errors: null,
+//     inv_id: inventoryData.inv_id,
+//     inv_make: inventoryData.inv_make,
+//     inv_model: inventoryData.inv_model,
+//     inv_year: inventoryData.inv_year,
+//     inv_description: inventoryData.inv_description,
+//     inv_image: inventoryData.inv_image,
+//     inv_thumbnail: inventoryData.inv_thumbnail,
+//     inv_price: inventoryData.inv_price,
+//     inv_miles: inventoryData.inv_miles,
+//     inv_color: inventoryData.inv_color,
+//     classification_id: inventoryData.classification_id
+//   })
+// }
+
 module.exports = invCont

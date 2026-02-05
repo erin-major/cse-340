@@ -17,7 +17,7 @@
                 <% } %>
 
                     <div class="inventory-form">
-                        <form action="/inv/update" method="post">
+                        <form action="/inv/update" method="post" id="updateForm">
                             <label for="classificationList">Classification:</label><br>
                             <%- classificationList %><br>
                                 <label for="inv_make">Make:</label><br>
@@ -48,6 +48,12 @@
                                 <label for="inv_color">Color:</label><br>
                                 <input type="text" id="inv_color" name="inv_color" placeholder="Enter Vehicle Color"
                                     required pattern="^[A-Za-z ]+$" value="<%= locals.inv_color %>"><br>
-                                <input type="submit" value="Update Vehicle">
+                                <input type="submit" value="Update Vehicle" disabled>
+
+                                <input type="hidden" name="inv_id" <% if(locals.inv_id) { %> value="<%= locals.inv_id %>
+                                    "
+                                    <% } %>>
                         </form>
                     </div>
+
+                    <script src="../../js/inv-update.js"></script>
