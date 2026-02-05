@@ -94,7 +94,7 @@ async function checkExistingInventory(inv_make, inv_model, inv_year) {
 /* ***************************
  *  Update Inventory Data
  * ************************** */
-async function updateInventory(  
+async function updateInventory(
   inv_id,
   inv_make,
   inv_model,
@@ -105,7 +105,7 @@ async function updateInventory(
   inv_year,
   inv_miles,
   inv_color,
-  classification_id  
+  classification_id
 ) {
   try {
     const sql =
@@ -129,4 +129,17 @@ async function updateInventory(
   }
 }
 
-module.exports = { getClassifications, getInventoryByClassificationId, getDetailsByInventoryId, addClassification, checkExistingClassification, addInventory, checkExistingInventory, updateInventory }
+/* ***************************
+ *  Delete Inventory Data
+ * ************************** */
+async function deleteInventory(inv_id) {
+  try {
+    const sql = 'DELETE FROM inventory WHERE inv_id = $1'
+    const data = await pool.query(sql, [inv_id])
+    return data
+  } catch (error) {
+    console.error("model error: " + error)
+  }
+}
+
+module.exports = { getClassifications, getInventoryByClassificationId, getDetailsByInventoryId, addClassification, checkExistingClassification, addInventory, checkExistingInventory, updateInventory, deleteInventory }
