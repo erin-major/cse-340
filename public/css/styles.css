@@ -361,6 +361,13 @@ th, td {
   color: var(--primary-color);
 }
 
+#confirmDelete {
+  font-size: 1.3rem;
+  color: var(--primary-color);
+  text-align: center;
+  margin: 0;
+}
+
 footer {
   margin: 2rem 1rem 1rem 1rem;
 }
