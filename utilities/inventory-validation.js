@@ -36,10 +36,12 @@ validate.checkClassification = async (req, res, next) => {
     errors = validationResult(req)
     if (!errors.isEmpty()) {
         let nav = await utilities.getNav()
+        const accountLink = await utilities.getAccountLink(req, res);
         res.render("inventory/add-classification", {
             errors,
             title: "Add Classification",
             nav,
+            accountLink,
             classification_name
         })
         return
@@ -160,11 +162,13 @@ validate.checkInventory = async (req, res, next) => {
     errors = validationResult(req)
     if (!errors.isEmpty()) {
         let nav = await utilities.getNav()
+        const accountLink = await utilities.getAccountLink(req, res);
         let classificationList = await utilities.buildClassificationList(classification_id)
         res.render("inventory/add-inventory", {
             errors,
             title: "Add Inventory",
             nav,
+            accountLink,
             classificationList,
             classification_id,
             inv_make,
@@ -192,11 +196,13 @@ validate.checkUpdateData = async (req, res, next) => {
     errors = validationResult(req)
     if (!errors.isEmpty()) {
         let nav = await utilities.getNav()
+        const accountLink = await utilities.getAccountLink(req, res);
         let classificationList = await utilities.buildClassificationList(classification_id)
         res.render("inventory/edit-inventory", {
             errors,
             title: "Edit Inventory - " + inv_make + " " + inv_model,
             nav,
+            accountLink,
             classificationList,
             classification_id,
             inv_make,

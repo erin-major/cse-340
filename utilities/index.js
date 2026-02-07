@@ -112,6 +112,18 @@ Util.buildClassificationList = async function (classification_id = null) {
   return classificationList
 }
 
+/* ************************
+ * Constructs the account link in header
+ ************************** */
+Util.getAccountLink = async function (req, res, next) {
+  let accountLink = ""
+  if (res.locals.loggedin) {
+    accountLink = `<a href=/account/account-management title="Click to manage your account">Welcome ${res.locals.accountData.account_firstname} |</a> <a href="/account/logout" title="Click to log out">Logout</a>`
+  } else {
+    accountLink = '<a href="/account/login" title="Click to log in">My Account</a>'
+  }
+  return accountLink
+}
 
 /* ****************************************
  * Middleware For Handling Errors
