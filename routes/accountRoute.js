@@ -14,6 +14,9 @@ router.get("/register", utilities.handleErrors(accountController.buildRegister))
 // Route to get the account view
 router.get("/", utilities.checkLogin, utilities.handleErrors(accountController.buildAccountManagement))
 
+// Route to build edit account view
+router.get("/edit/:account_id", utilities.handleErrors(accountController.buildAccountEdit));
+
 // Process the registration data
 router.post(
     "/register",
