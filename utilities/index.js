@@ -167,4 +167,19 @@ Util.checkLogin = (req, res, next) => {
   }
 }
 
+/* ****************************************
+ *  Check Account Type
+ * ************************************ */
+Util.checkAccountType = (req, res, next) => {
+  const allowedTypes = ['Admin', 'Employee']
+  const accountType = res.locals.accountData?.account_type
+  if (allowedTypes.includes(accountType)) {
+    next()
+  } else {
+    req.flash("notice", "Insufficient permissions.")
+    return res.redirect("/account/login")
+  }
+}
+
+
 module.exports = Util
