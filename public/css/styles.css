@@ -22,7 +22,8 @@ main {
 }
 
 h1,
-h2 {
+h2,
+h3 {
   font-family: var(--heading-font);
 }
 
@@ -117,7 +118,7 @@ nav li, #inv-display li {
   grid-row-start: 2;
 }
 
-h2 {
+h2, h3 {
   margin-left: 1rem;
   font-size: 1.3rem;
 }
@@ -357,7 +358,7 @@ th, td {
   color: var(--dark-color);
 }
 
-#inventoryDisplay a:hover {
+#inventoryDisplay a:hover, #editAccount:hover, #manageInv:hover {
   color: var(--primary-color);
 }
 
@@ -366,6 +367,17 @@ th, td {
   color: var(--primary-color);
   text-align: center;
   margin: 0;
+}
+
+#loggedInMessage {
+  margin: 0rem 1rem 1rem;
+  font-size: 1.2rem;
+}
+
+#editAccount, #manageInv {
+  color: var(--dark-color);
+  margin: 0rem 1rem 1.4rem;
+  font-size: 1.2rem;
 }
 
 footer {

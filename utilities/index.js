@@ -118,12 +118,30 @@ Util.buildClassificationList = async function (classification_id = null) {
 Util.getAccountLink = async function (req, res, next) {
   let accountLink = ""
   if (res.locals.loggedin) {
-    accountLink = `<a href=/account/account-management title="Click to manage your account">Welcome ${res.locals.accountData.account_firstname} |</a> <a href="/account/logout" title="Click to log out">Logout</a>`
+    accountLink = `<a href=/account title="Click to manage your account">Welcome ${res.locals.accountData.account_firstname} |</a> <a href="/account/logout" title="Click to log out">Logout</a>`
   } else {
     accountLink = '<a href="/account/login" title="Click to log in">My Account</a>'
   }
   return accountLink
 }
+
+/* ************************
+ * Build Account Management View
+ ************************** */
+Util.buildAccountManagement = async function (req, res, next) {
+  let grid = ""
+  let allowedTypes = ['Admin', 'Employee']
+  let accountType = res.locals.accountData?.account_type
+  grid += `<h2>Welcome ${res.locals.accountData?.account_firstname}!</h2>`
+  grid += `<p id='loggedInMessage'>You're logged in.</p>`
+  grid += `<a href=/account/edit/${res.locals.accountData?.account_id} id='editAccount' title='Click to edit account information'>Edit Account Information</a>`
+  if (allowedTypes.includes(accountType)) {
+    grid += '<h3>Inventory Management</h3>'
+    grid += `<a href=/inv title='Click to manage inventory' id='manageInv'>Manage Inventory</a>`
+  }
+  return grid
+}
+
 
 /* ****************************************
  * Middleware For Handling Errors
@@ -168,7 +186,7 @@ Util.checkLogin = (req, res, next) => {
 }
 
 /* ****************************************
- *  Check Account Type
+ *  Middleware to check account type
  * ************************************ */
 Util.checkAccountType = (req, res, next) => {
   const allowedTypes = ['Admin', 'Employee']

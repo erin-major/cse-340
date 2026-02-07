@@ -9,7 +9,7 @@ require("dotenv").config()
 * *************************************** */
 async function buildLogin(req, res, next) {
   let nav = await utilities.getNav()
-  const accountLink = await utilities.getAccountLink(req, res);
+  const accountLink = await utilities.getAccountLink(req, res)
   res.render("account/login", {
     title: "Login",
     nav,
@@ -23,7 +23,7 @@ async function buildLogin(req, res, next) {
 * *************************************** */
 async function buildRegister(req, res, next) {
   let nav = await utilities.getNav()
-  const accountLink = await utilities.getAccountLink(req, res);
+  const accountLink = await utilities.getAccountLink(req, res)
   res.render("account/register", {
     title: "Register",
     nav,
@@ -37,9 +37,25 @@ async function buildRegister(req, res, next) {
 * *************************************** */
 async function buildAccountManagement(req, res, next) {
   let nav = await utilities.getNav()
-  const accountLink = await utilities.getAccountLink(req, res);
-  res.render("account/account-management", {
+  const accountLink = await utilities.getAccountLink(req, res)
+  let grid = await utilities.buildAccountManagement(req, res)
+  res.render("account/management", {
     title: "Account Management",
+    nav,
+    accountLink,
+    grid,
+    errors: null
+  })
+}
+
+/* ****************************************
+*  Deliver account edit view
+* *************************************** */
+async function buildAccountEdit(req, res, next) {
+  let nav = await utilities.getNav()
+  const accountLink = await utilities.getAccountLink(req, res)
+  res.render("account/account-edit", {
+    title: "Edit Account",
     nav,
     accountLink,
     errors: null
@@ -51,7 +67,7 @@ async function buildAccountManagement(req, res, next) {
 * *************************************** */
 async function registerAccount(req, res) {
   let nav = await utilities.getNav()
-  const accountLink = await utilities.getAccountLink(req, res);
+  const accountLink = await utilities.getAccountLink(req, res)
   const { account_firstname, account_lastname, account_email, account_password } = req.body
 
   // Hash the password before storing
@@ -143,4 +159,4 @@ async function accountLogin(req, res) {
   }
 }
 
-module.exports = { buildLogin, buildRegister, registerAccount, buildAccountManagement, accountLogin }
+module.exports = { buildLogin, buildRegister, registerAccount, buildAccountManagement, buildAccountEdit, accountLogin }
