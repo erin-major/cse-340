@@ -16,8 +16,8 @@
                 </ul>
                 <% } %>
 
-                    <div class="register-form">
-                        <form action="/account/register" method="post">
+                    <div class="edit-account-form">
+                        <form action="/account/edit" method="post" id="editAccountForm">
                             <label for="account_firstname">First Name:</label><br>
                             <input type="text" id="account_firstname" name="account_firstname"
                                 placeholder="Enter First Name" required autocomplete="on" autofocus value="<%= locals.account_firstname %>"><br>
@@ -27,13 +27,21 @@
                             <label for="account_email">Email:</label><br>
                             <input type="email" id="account_email" name="account_email" placeholder="Enter Email"
                                 required autocomplete="on" value="<%= locals.account_email %>"><br>
+                            <input type="submit" value="Update Account" disabled>
+                            <input type="hidden" name="account_id" <% if(locals.account_id) { %> value="<%= locals.account_id %>" <% } %>>
+                        </form>
+                    </div>
+
+                    <div class="edit-password-form">    
+                        <form action="/account/edit-password" method="post">                  
                             <label for="account_password">Password:</label><br>
-                            <input type="password" id="account_password" name="account_password"
-                                placeholder="Enter Password" required minlength="12"
-                                pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
+                            <input type="password" id="account_password" name="account_password" placeholder="Enter Password" required
+                                minlength="12" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
                                 title="Password must be at least 12 characters and include 1 capital letter, 1 number, and 1 special character."><br>
                             <p id="pwdReq">Passwords must be at least 12 characters and contain at least 1 number, 1
                                 capital letter and 1 special character</p>
-                            <input type="submit" value="Register">
+                            <input type="submit" value="Change Password" disabled>
                         </form>
                     </div>
+
+                    <script src="../../js/account-update.js"></script>

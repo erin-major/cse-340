@@ -82,7 +82,7 @@ app.use(async (req, res, next) => {
 *************************/
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav()
-  const accountLink = await utilities.getAccountLink(req, res);
+  let accountLink = await utilities.getAccountLink(req, res)
   console.error(`Error at: "${req.originalUrl}": ${err.message}`)
   if (err.status == 404) { message = err.message } else { message = 'Oh no! There was a crash. Maybe try a different route?' }
   res.render("errors/error", {

@@ -33,4 +33,12 @@ router.post(
     utilities.handleErrors(accountController.accountLogin)
 )
 
+// Process the update account data
+router.post(
+    "/edit/",
+    regValidate.updateRules(),
+    regValidate.checkUpdateData,
+    utilities.handleErrors(accountController.updateAccount)
+)
+
 module.exports = router;

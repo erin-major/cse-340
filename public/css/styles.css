@@ -242,7 +242,7 @@ h2, h3 {
   font-size: 1.2rem;
 }
 
-.login-form, .register-form, .classification-form, .inventory-form {
+.login-form, .register-form, .classification-form, .inventory-form, .edit-account-form, .edit-password-form {
   margin: 0 auto;
   padding: 1rem;
   border: 2px solid var(--tertiary-color);

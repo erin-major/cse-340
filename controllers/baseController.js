@@ -3,7 +3,7 @@ const baseController = {}
 
 baseController.buildHome = async (req, res) => {
     const nav = await utilities.getNav()
-    const accountLink = await utilities.getAccountLink(req, res);
+    let accountLink = await utilities.getAccountLink(req, res)
     res.render("index", { title: "Home", nav, accountLink, errors: null})
 }
 

@@ -9,7 +9,7 @@ require("dotenv").config()
 * *************************************** */
 async function buildLogin(req, res, next) {
   let nav = await utilities.getNav()
-  const accountLink = await utilities.getAccountLink(req, res)
+  let accountLink = await utilities.getAccountLink(req, res)
   res.render("account/login", {
     title: "Login",
     nav,
@@ -23,7 +23,7 @@ async function buildLogin(req, res, next) {
 * *************************************** */
 async function buildRegister(req, res, next) {
   let nav = await utilities.getNav()
-  const accountLink = await utilities.getAccountLink(req, res)
+  let accountLink = await utilities.getAccountLink(req, res)
   res.render("account/register", {
     title: "Register",
     nav,
@@ -37,7 +37,7 @@ async function buildRegister(req, res, next) {
 * *************************************** */
 async function buildAccountManagement(req, res, next) {
   let nav = await utilities.getNav()
-  const accountLink = await utilities.getAccountLink(req, res)
+  let accountLink = await utilities.getAccountLink(req, res)
   let grid = await utilities.buildAccountManagement(req, res)
   res.render("account/management", {
     title: "Account Management",
@@ -53,12 +53,18 @@ async function buildAccountManagement(req, res, next) {
 * *************************************** */
 async function buildAccountEdit(req, res, next) {
   let nav = await utilities.getNav()
-  const accountLink = await utilities.getAccountLink(req, res)
-  res.render("account/account-edit", {
+  let accountLink = await utilities.getAccountLink(req, res)
+  let account_id = parseInt(req.params.account_id)
+  let accountData = await accountModel.getAccountById(account_id)
+  res.render("account/edit", {
     title: "Edit Account",
     nav,
     accountLink,
-    errors: null
+    errors: null,
+    account_id: account_id,
+    account_firstname: accountData.account_firstname,
+    account_lastname: accountData.account_lastname,
+    account_email: accountData.account_email
   })
 }
 
@@ -67,7 +73,7 @@ async function buildAccountEdit(req, res, next) {
 * *************************************** */
 async function registerAccount(req, res) {
   let nav = await utilities.getNav()
-  const accountLink = await utilities.getAccountLink(req, res)
+  let accountLink = await utilities.getAccountLink(req, res)
   const { account_firstname, account_lastname, account_email, account_password } = req.body
 
   // Hash the password before storing
@@ -119,7 +125,7 @@ async function registerAccount(req, res) {
  * ************************************ */
 async function accountLogin(req, res) {
   let nav = await utilities.getNav()
-  const accountLink = await utilities.getAccountLink(req, res);
+  let accountLink = await utilities.getAccountLink(req, res);
   const { account_email, account_password } = req.body
   const accountData = await accountModel.getAccountByEmail(account_email)
   if (!accountData) {
@@ -159,4 +165,40 @@ async function accountLogin(req, res) {
   }
 }
 
-module.exports = { buildLogin, buildRegister, registerAccount, buildAccountManagement, buildAccountEdit, accountLogin }
+/* ****************************************
+*  Process Account Update
+* *************************************** */
+async function updateAccount(req, res) {
+  let account_id = parseInt(req.body.account_id)
+  let nav = await utilities.getNav()
+  let accountLink = await utilities.getAccountLink(req, res)
+  const { account_firstname, account_lastname, account_email } = req.body
+  const updateResult = await accountModel.updateAccount(
+    account_id,
+    account_firstname,
+    account_lastname,
+    account_email    
+  )
+
+  if (updateResult) {
+    req.flash(
+      "notice",
+      `Congratulations, you\'ve updated your account.`
+    )
+    res.redirect("/account/")
+  } else {
+    req.flash("notice", "Sorry, updating your account failed.")
+    res.status(501).render("account/edit", {
+      title: "Edit Account",
+      nav,
+      errors: null,
+      accountLink,
+      account_firstname,
+      account_lastname,
+      account_email,
+      account_id
+    })
+  }
+}
+
+module.exports = { buildLogin, buildRegister, registerAccount, buildAccountManagement, buildAccountEdit, accountLogin, updateAccount }
