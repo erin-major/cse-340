@@ -117,10 +117,10 @@ Util.buildClassificationList = async function (classification_id = null) {
  * Constructs the account link in header
  ************************** */
 Util.getAccountLink = async function (req, res, next) {
-  let account_id = res.locals.accountData.account_id
-  let data = await acctModel.getAccountById(account_id)
   let accountLink = ""
   if (res.locals.loggedin) {
+    let account_id = res.locals.accountData.account_id
+    let data = await acctModel.getAccountById(account_id)
     accountLink = `<a href=/account title="Click to manage your account">Welcome ${data.account_firstname} |</a> <a href="/account/logout" title="Click to log out">Logout</a>`
   } else {
     accountLink = '<a href="/account/login" title="Click to log in">My Account</a>'
@@ -184,6 +184,24 @@ Util.checkJWTToken = (req, res, next) => {
 Util.checkLogin = (req, res, next) => {
   if (res.locals.loggedin) {
     next()
+  } else {
+    req.flash("notice", "Please log in.")
+    return res.redirect("/account/login")
+  }
+}
+
+/* ****************************************
+ *  Check Edit Account Match
+ * ************************************ */
+Util.checkAccountMatch = (req, res, next) => {
+  let req_account_id = parseInt(req.params.account_id)
+  if (res.locals.loggedin) {
+    if (res.locals.accountData.account_id === req_account_id) {
+      next()
+    } else {
+      req.flash("notice", "Insufficient permissions.")
+      return res.redirect("/account/")
+    }
   } else {
     req.flash("notice", "Please log in.")
     return res.redirect("/account/login")

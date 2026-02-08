@@ -369,6 +369,12 @@ th, td {
   margin: 0;
 }
 
+#confirmChangePassword {
+  color: var(--primary-color);
+  text-align: center;
+  font-style: italic;
+}
+
 #loggedInMessage {
   margin: 0rem 1rem 1rem;
   font-size: 1.2rem;

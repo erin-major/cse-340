@@ -35,12 +35,14 @@
                     <div class="edit-password-form">    
                         <form action="/account/edit-password" method="post">                  
                             <label for="account_password">Password:</label><br>
+                            <p id="confirmChangePassword">Your original password will be changed!</p>
                             <input type="password" id="account_password" name="account_password" placeholder="Enter Password" required
                                 minlength="12" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
                                 title="Password must be at least 12 characters and include 1 capital letter, 1 number, and 1 special character."><br>
                             <p id="pwdReq">Passwords must be at least 12 characters and contain at least 1 number, 1
                                 capital letter and 1 special character</p>
-                            <input type="submit" value="Change Password" disabled>
+                            <input type="submit" value="Change Password">
+                            <input type="hidden" name="account_id" <% if(locals.account_id) { %> value="<%= locals.account_id %>" <% } %>>
                         </form>
                     </div>
 

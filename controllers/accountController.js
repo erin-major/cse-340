@@ -177,7 +177,7 @@ async function updateAccount(req, res) {
     account_id,
     account_firstname,
     account_lastname,
-    account_email    
+    account_email
   )
 
   if (updateResult) {
@@ -201,4 +201,59 @@ async function updateAccount(req, res) {
   }
 }
 
-module.exports = { buildLogin, buildRegister, registerAccount, buildAccountManagement, buildAccountEdit, accountLogin, updateAccount }
+/* ****************************************
+*  Process Password Update
+* *************************************** */
+async function updatePassword(req, res) {
+  let account_id = parseInt(req.body.account_id)
+  let nav = await utilities.getNav()
+  let accountLink = await utilities.getAccountLink(req, res)
+  const { account_password } = req.body
+  let data = await accountModel.getAccountById(account_id)
+
+  // Hash the password before storing
+  let hashedPassword
+  try {
+    // regular password and cost (salt is generated automatically)
+    hashedPassword = await bcrypt.hashSync(account_password, 10)
+  } catch (error) {
+    req.flash("notice", 'Sorry, there was an error updating the password.')
+    res.status(500).render("account/edit", {
+      title: "Edit Account",
+      nav,
+      accountLink,
+      errors: null,
+      account_firstname: data.account_firstname,
+      account_lastname: data.account_lastname,
+      account_email: data.account_email,
+      account_id
+    })
+  }
+
+  const updateResult = await accountModel.updatePassword(
+    account_id,
+    hashedPassword
+  )
+
+  if (updateResult) {
+    req.flash(
+      "notice",
+      `Congratulations, you\'ve updated your password.`
+    )
+    res.redirect("/account/")
+  } else {
+    req.flash("notice", "Sorry, there was an error updating the password.")
+    res.status(501).render("account/edit", {
+      title: "Edit Account",
+      nav,
+      errors: null,
+      accountLink,
+      account_firstname: data.account_firstname,
+      account_lastname: data.account_lastname,
+      account_email: data.account_email,
+      account_id
+    })
+  }
+}
+
+module.exports = { buildLogin, buildRegister, registerAccount, buildAccountManagement, buildAccountEdit, accountLogin, updateAccount, updatePassword }
