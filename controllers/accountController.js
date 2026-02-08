@@ -181,6 +181,7 @@ async function updateAccount(req, res) {
   )
 
   if (updateResult) {
+    await utilities.refreshJWTToken(req, res, () => {})
     req.flash(
       "notice",
       `Congratulations, you\'ve updated your account.`
@@ -236,6 +237,7 @@ async function updatePassword(req, res) {
   )
 
   if (updateResult) {
+    await utilities.refreshJWTToken(req, res, () => {})
     req.flash(
       "notice",
       `Congratulations, you\'ve updated your password.`
@@ -256,4 +258,12 @@ async function updatePassword(req, res) {
   }
 }
 
-module.exports = { buildLogin, buildRegister, registerAccount, buildAccountManagement, buildAccountEdit, accountLogin, updateAccount, updatePassword }
+/* ****************************************
+ *  Process logout request
+ * ************************************ */
+function accountLogout(req, res) {
+  res.clearCookie('jwt')
+  return res.redirect("/")
+}
+
+module.exports = { buildLogin, buildRegister, registerAccount, buildAccountManagement, buildAccountEdit, accountLogin, updateAccount, updatePassword, accountLogout }

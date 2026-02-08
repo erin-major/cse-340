@@ -119,9 +119,7 @@ Util.buildClassificationList = async function (classification_id = null) {
 Util.getAccountLink = async function (req, res, next) {
   let accountLink = ""
   if (res.locals.loggedin) {
-    let account_id = res.locals.accountData.account_id
-    let data = await acctModel.getAccountById(account_id)
-    accountLink = `<a href=/account title="Click to manage your account">Welcome ${data.account_firstname} |</a> <a href="/account/logout" title="Click to log out">Logout</a>`
+    accountLink = `<a href=/account title="Click to manage your account">Welcome ${res.locals.accountData.account_firstname} |</a> <a href="/account/logout" title="Click to log out">Logout</a>`
   } else {
     accountLink = '<a href="/account/login" title="Click to log in">My Account</a>'
   }
@@ -132,21 +130,18 @@ Util.getAccountLink = async function (req, res, next) {
  * Build Account Management View
  ************************** */
 Util.buildAccountManagement = async function (req, res, next) {
-  let account_id = res.locals.accountData.account_id
-  let data = await acctModel.getAccountById(account_id)
   let grid = ""
   let allowedTypes = ['Admin', 'Employee']
-  let accountType = data.account_type
-  grid += `<h2>Welcome ${data.account_firstname}!</h2>`
+  let accountType = res.locals.accountData.account_type
+  grid += `<h2>Welcome ${res.locals.accountData.account_firstname}!</h2>`
   grid += `<p id='loggedInMessage'>You're logged in.</p>`
-  grid += `<a href=/account/edit/${data.account_id} id='editAccount' title='Click to edit account information'>Edit Account Information</a>`
+  grid += `<a href=/account/edit/${res.locals.accountData.account_id} id='editAccount' title='Click to edit account information'>Edit Account Information</a>`
   if (allowedTypes.includes(accountType)) {
     grid += '<h3>Inventory Management</h3>'
     grid += `<a href=/inv title='Click to manage inventory' id='manageInv'>Manage Inventory</a>`
   }
   return grid
 }
-
 
 /* ****************************************
  * Middleware For Handling Errors
@@ -175,6 +170,26 @@ Util.checkJWTToken = (req, res, next) => {
       })
   } else {
     next()
+  }
+}
+
+/* ****************************************
+* Refresh JWT token after account update
+**************************************** */
+Util.refreshJWTToken = async function (req, res, next) {
+  let account_id = parseInt(req.body.account_id)
+  let data = await acctModel.getAccountById(account_id)
+  res.clearCookie('jwt');
+  try {
+    const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 })
+    if (process.env.NODE_ENV === 'development') {
+      res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
+    } else {
+      res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
+    }
+    next()
+  } catch (error) {
+    next(new Error('Access Forbidden'))
   }
 }
 
@@ -209,7 +224,7 @@ Util.checkAccountMatch = (req, res, next) => {
 }
 
 /* ****************************************
- *  Middleware to check account type
+ *  Check account type
  * ************************************ */
 Util.checkAccountType = (req, res, next) => {
   const allowedTypes = ['Admin', 'Employee']
@@ -221,6 +236,5 @@ Util.checkAccountType = (req, res, next) => {
     return res.redirect("/account/login")
   }
 }
-
 
 module.exports = Util
