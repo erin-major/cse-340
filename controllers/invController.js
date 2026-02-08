@@ -11,7 +11,7 @@ invCont.buildByClassificationId = async function (req, res, next) {
   const data = await invModel.getInventoryByClassificationId(classification_id)
   const grid = await utilities.buildClassificationGrid(data)
   let nav = await utilities.getNav()
-  const accountLink = await utilities.getAccountLink(req, res);
+  let accountLink = await utilities.getAccountLink(req, res)
   const className = data[0].classification_name
   res.render("./inventory/classification", {
     title: className + " Vehicles",
@@ -30,7 +30,7 @@ invCont.buildByInventoryId = async function (req, res, next) {
   const data = await invModel.getDetailsByInventoryId(inventory_id)
   const grid = await utilities.buildDetailsGrid(data)
   let nav = await utilities.getNav()
-  const accountLink = await utilities.getAccountLink(req, res);
+  let accountLink = await utilities.getAccountLink(req, res)
   const vehicleName = data.inv_year + " " + data.inv_make + " " + data.inv_model
   res.render("./inventory/details", {
     title: vehicleName,
@@ -46,7 +46,7 @@ invCont.buildByInventoryId = async function (req, res, next) {
  * ************************** */
 invCont.buildManagementView = async function (req, res, next) {
   let nav = await utilities.getNav()
-  const accountLink = await utilities.getAccountLink(req, res);
+  let accountLink = await utilities.getAccountLink(req, res)
   const classificationSelect = await utilities.buildClassificationList()
   res.render("./inventory/management", {
     title: "Management",
@@ -62,7 +62,7 @@ invCont.buildManagementView = async function (req, res, next) {
  * ************************** */
 invCont.buildAddClassificationView = async function (req, res, next) {
   let nav = await utilities.getNav()
-  const accountLink = await utilities.getAccountLink(req, res);
+  let accountLink = await utilities.getAccountLink(req, res)
   res.render("./inventory/add-classification", {
     title: "Add Classification",
     nav,
@@ -76,7 +76,7 @@ invCont.buildAddClassificationView = async function (req, res, next) {
 * *************************************** */
 invCont.addClassification = async function (req, res) {
   let nav = await utilities.getNav()
-  const accountLink = await utilities.getAccountLink(req, res);
+  let accountLink = await utilities.getAccountLink(req, res)
   const { classification_name } = req.body
 
   const classResult = await invModel.addClassification(
@@ -89,7 +89,7 @@ invCont.addClassification = async function (req, res) {
       `Congratulations, you\'ve added the ${classification_name} classification.`
     )
     let nav = await utilities.getNav()
-    const accountLink = await utilities.getAccountLink(req, res);
+    let accountLink = await utilities.getAccountLink(req, res)
     res.status(201).render("inventory/management", {
       title: "Management",
       nav,
@@ -113,7 +113,7 @@ invCont.addClassification = async function (req, res) {
  * ************************** */
 invCont.buildAddInventoryView = async function (req, res, next) {
   let nav = await utilities.getNav()
-  const accountLink = await utilities.getAccountLink(req, res);
+  let accountLink = await utilities.getAccountLink(req, res)
   const classificationList = await utilities.buildClassificationList()
   res.render("./inventory/add-inventory", {
     title: "Add Inventory",
@@ -129,7 +129,7 @@ invCont.buildAddInventoryView = async function (req, res, next) {
 * *************************************** */
 invCont.addInventory = async function (req, res) {
   let nav = await utilities.getNav()
-  const accountLink = await utilities.getAccountLink(req, res);
+  let accountLink = await utilities.getAccountLink(req, res)
   const { classification_id, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color } = req.body
 
   const inventoryResult = await invModel.addInventory(
@@ -151,7 +151,7 @@ invCont.addInventory = async function (req, res) {
       `Congratulations, you\'ve added the ${inv_make} ${inv_model} inventory item.`
     )
     let nav = await utilities.getNav()
-    const accountLink = await utilities.getAccountLink(req, res);
+    let accountLink = await utilities.getAccountLink(req, res)
     res.status(201).render("inventory/management", {
       title: "Management",
       nav,
@@ -199,7 +199,7 @@ invCont.getInventoryJSON = async (req, res, next) => {
  * ************************** */
 invCont.buildEditInventoryView = async function (req, res, next) {
   let nav = await utilities.getNav()
-  const accountLink = await utilities.getAccountLink(req, res);
+  let accountLink = await utilities.getAccountLink(req, res)
   const inventory_id = parseInt(req.params.inventoryId)
   const inventoryData = await invModel.getDetailsByInventoryId(inventory_id)
   const name = inventoryData.inv_make + " " + inventoryData.inv_model
@@ -230,7 +230,7 @@ invCont.buildEditInventoryView = async function (req, res, next) {
 invCont.updateInventory = async function (req, res) {
   const inv_id = parseInt(req.body.inv_id)
   let nav = await utilities.getNav()
-  const accountLink = await utilities.getAccountLink(req, res);
+  let accountLink = await utilities.getAccountLink(req, res)
   const { classification_id, inv_make, inv_model, inv_year, inv_description, inv_image, inv_thumbnail, inv_price, inv_miles, inv_color } = req.body
   const updateResult = await invModel.updateInventory(
     inv_id,
@@ -281,7 +281,7 @@ invCont.updateInventory = async function (req, res) {
  * ************************** */
 invCont.buildDeleteInventoryView = async function (req, res, next) {
   let nav = await utilities.getNav()
-  const accountLink = await utilities.getAccountLink(req, res);
+  let accountLink = await utilities.getAccountLink(req, res)
   const inventory_id = parseInt(req.params.inventoryId)
   const inventoryData = await invModel.getDetailsByInventoryId(inventory_id)
   const name = inventoryData.inv_make + " " + inventoryData.inv_model
@@ -304,7 +304,7 @@ invCont.buildDeleteInventoryView = async function (req, res, next) {
 invCont.deleteInventory = async function (req, res) {
   const inv_id = parseInt(req.body.inv_id)
   let nav = await utilities.getNav()
-  const accountLink = await utilities.getAccountLink(req, res);
+  let accountLink = await utilities.getAccountLink(req, res)
   const deleteResult = await invModel.deleteInventory(inv_id)
 
   if (deleteResult) {

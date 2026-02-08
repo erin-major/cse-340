@@ -1,4 +1,5 @@
 const invModel = require("../models/inventory-model")
+const acctModel = require("../models/account-model")
 const Util = {}
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
@@ -118,7 +119,9 @@ Util.buildClassificationList = async function (classification_id = null) {
 Util.getAccountLink = async function (req, res, next) {
   let accountLink = ""
   if (res.locals.loggedin) {
-    accountLink = `<a href=/account title="Click to manage your account">Welcome ${res.locals.accountData.account_firstname} |</a> <a href="/account/logout" title="Click to log out">Logout</a>`
+    let account_id = res.locals.accountData.account_id
+    let data = await acctModel.getAccountById(account_id)
+    accountLink = `<a href=/account title="Click to manage your account">Welcome ${data.account_firstname} |</a> <a href="/account/logout" title="Click to log out">Logout</a>`
   } else {
     accountLink = '<a href="/account/login" title="Click to log in">My Account</a>'
   }
@@ -129,12 +132,14 @@ Util.getAccountLink = async function (req, res, next) {
  * Build Account Management View
  ************************** */
 Util.buildAccountManagement = async function (req, res, next) {
+  let account_id = res.locals.accountData.account_id
+  let data = await acctModel.getAccountById(account_id)
   let grid = ""
   let allowedTypes = ['Admin', 'Employee']
-  let accountType = res.locals.accountData?.account_type
-  grid += `<h2>Welcome ${res.locals.accountData?.account_firstname}!</h2>`
+  let accountType = data.account_type
+  grid += `<h2>Welcome ${data.account_firstname}!</h2>`
   grid += `<p id='loggedInMessage'>You're logged in.</p>`
-  grid += `<a href=/account/edit/${res.locals.accountData?.account_id} id='editAccount' title='Click to edit account information'>Edit Account Information</a>`
+  grid += `<a href=/account/edit/${data.account_id} id='editAccount' title='Click to edit account information'>Edit Account Information</a>`
   if (allowedTypes.includes(accountType)) {
     grid += '<h3>Inventory Management</h3>'
     grid += `<a href=/inv title='Click to manage inventory' id='manageInv'>Manage Inventory</a>`
@@ -179,6 +184,24 @@ Util.checkJWTToken = (req, res, next) => {
 Util.checkLogin = (req, res, next) => {
   if (res.locals.loggedin) {
     next()
+  } else {
+    req.flash("notice", "Please log in.")
+    return res.redirect("/account/login")
+  }
+}
+
+/* ****************************************
+ *  Check Edit Account Match
+ * ************************************ */
+Util.checkAccountMatch = (req, res, next) => {
+  let req_account_id = parseInt(req.params.account_id)
+  if (res.locals.loggedin) {
+    if (res.locals.accountData.account_id === req_account_id) {
+      next()
+    } else {
+      req.flash("notice", "Insufficient permissions.")
+      return res.redirect("/account/")
+    }
   } else {
     req.flash("notice", "Please log in.")
     return res.redirect("/account/login")
