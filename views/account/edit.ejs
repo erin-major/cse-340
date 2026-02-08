@@ -33,9 +33,9 @@
                     </div>
 
                     <div class="edit-password-form">    
-                        <form action="/account/edit-password" method="post">                  
+                        <form action="/account/edit-password" method="post">
+                            <p id="confirmChangePassword">Your original password will be changed!</p>                  
                             <label for="account_password">Password:</label><br>
-                            <p id="confirmChangePassword">Your original password will be changed!</p>
                             <input type="password" id="account_password" name="account_password" placeholder="Enter Password" required
                                 minlength="12" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
                                 title="Password must be at least 12 characters and include 1 capital letter, 1 number, and 1 special character."><br>

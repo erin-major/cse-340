@@ -370,7 +370,6 @@ th, td {
 }
 
 #confirmChangePassword {
-  color: var(--primary-color);
   text-align: center;
   font-style: italic;
 }
