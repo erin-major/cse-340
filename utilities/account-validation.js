@@ -27,7 +27,6 @@ validate.registrationRules = () => {
         // valid email is required and cannot already exist in the DB
         body("account_email", "A valid email is required.")
             .trim()
-            .escape()
             .notEmpty()
             .bail()
             .isEmail()
@@ -161,12 +160,18 @@ validate.updateRules = () => {
         // valid email is required and must match format
         body("account_email", "A valid email is required.")
             .trim()
-            .escape()
             .notEmpty()
             .bail()
             .isEmail()
             .bail()
             .normalizeEmail()
+            .custom(async (account_email, { req }) => {
+                const account_id = parseInt(req.body.account_id)
+                const emailExists = await accountModel.checkExistingEmailDiffAccount(account_email, account_id)
+                if (emailExists > 0) {
+                    throw new Error("Email exists. Please use different email.")
+                }
+            })
     ]
 }
 
@@ -200,7 +205,7 @@ validate.checkUpdateData = async (req, res, next) => {
   *  Password Update Validation Rules
   * ********************************* */
 validate.passwordUpdateRules = () => {
-    return [     
+    return [
         // password is required and must be strong password
         body("account_password", "Password does not meet requirements.")
             .trim()
@@ -241,7 +246,5 @@ validate.checkPasswordUpdateData = async (req, res, next) => {
     }
     next()
 }
-
-
 
 module.exports = validate

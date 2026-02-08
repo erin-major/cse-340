@@ -25,6 +25,19 @@ async function checkExistingEmail(account_email) {
   }
 }
 
+/* **********************
+ *   Check for existing email in different account
+ * ********************* */
+async function checkExistingEmailDiffAccount(account_email, account_id) {
+  try {
+    const sql = "SELECT * FROM account WHERE account_email = $1 AND account_id != $2"
+    const email = await pool.query(sql, [account_email, account_id])
+    return email.rowCount
+  } catch (error) {
+    return error.message
+  }
+}
+
 /* *****************************
 * Return account data using email address
 * ***************************** */
@@ -65,7 +78,7 @@ async function updateAccount(
   try {
     const sql =
       "UPDATE public.account SET account_firstname = $1, account_lastname = $2, account_email = $3 WHERE account_id = $4 RETURNING *"
-    const data = await pool.query(sql, [      
+    const data = await pool.query(sql, [
       account_firstname,
       account_lastname,
       account_email,
@@ -98,4 +111,4 @@ async function updatePassword(
 }
 
 
-module.exports = { registerAccount, checkExistingEmail, getAccountByEmail, getAccountById, updateAccount, updatePassword }
+module.exports = { registerAccount, checkExistingEmail, checkExistingEmailDiffAccount, getAccountByEmail, getAccountById, updateAccount, updatePassword }
