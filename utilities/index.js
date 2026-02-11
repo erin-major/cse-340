@@ -121,7 +121,12 @@ Util.buildAddReview = async function (req, res) {
   let addReview
   addReview = '<div id="inv-add-review">'
   if (res.locals.loggedin) {
-    addReview += '<p>Logged in!</p>'
+    addReview += '<div class="add-review-form">'
+    addReview += '<form action="/review/add" method="post">'
+    addReview += '<label for="screenName">Screen Name:</label>'
+    addReview += `<input type="text" id="screenName" name="screenName" value="${res.locals.accountData.account_firstname[0]}${res.locals.accountData.account_lastname}" readonly>`
+    addReview += '<label for="review_text">Review:</label>'
+    addReview += '<textarea id="review_text" name="review_text" required rows="4"></textarea>'
   } else {
     addReview += '<p id="reviewLogin">You must <a href="/account/login">login</a> to write a review.</p>'
   }
