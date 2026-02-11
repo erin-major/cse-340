@@ -41,6 +41,25 @@ async function getDetailsByInventoryId(inventory_id) {
   }
 }
 
+/* ***************************
+ *  Get all reviews for an inventory items by inventory_id
+ * ************************** */
+async function getReviewsByInventoryId(inventory_id) {
+  try {
+    const data = await pool.query(
+      `SELECT r.review_id, r.review_text, r.review_date, a.account_firstname, a.account_lastname FROM public.review AS r
+      INNER JOIN public.account AS a
+      ON r.account_id = a.account_id
+      WHERE inv_id = $1
+      ORDER BY r.review_date DESC`,
+      [inventory_id]
+    )
+    return data.rows
+  } catch (error) {
+    console.error("getReviewsByInventoryId error " + error)
+  }
+}
+
 /* *****************************
 *   Add new classification
 * *************************** */
@@ -142,4 +161,4 @@ async function deleteInventory(inv_id) {
   }
 }
 
-module.exports = { getClassifications, getInventoryByClassificationId, getDetailsByInventoryId, addClassification, checkExistingClassification, addInventory, checkExistingInventory, updateInventory, deleteInventory }
+module.exports = { getClassifications, getInventoryByClassificationId, getDetailsByInventoryId, addClassification, checkExistingClassification, addInventory, checkExistingInventory, updateInventory, deleteInventory, getReviewsByInventoryId }

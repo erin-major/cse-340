@@ -29,6 +29,9 @@ invCont.buildByInventoryId = async function (req, res, next) {
   const inventory_id = req.params.inventoryId
   const data = await invModel.getDetailsByInventoryId(inventory_id)
   const grid = await utilities.buildDetailsGrid(data)
+  const reviewData = await invModel.getReviewsByInventoryId(inventory_id)
+  const reviewGrid = await utilities.buildReviewGrid(reviewData)
+  const addReview = await utilities.buildAddReview(req, res)
   let nav = await utilities.getNav()
   let accountLink = await utilities.getAccountLink(req, res)
   const vehicleName = data.inv_year + " " + data.inv_make + " " + data.inv_model
@@ -37,6 +40,8 @@ invCont.buildByInventoryId = async function (req, res, next) {
     nav,
     accountLink,
     grid,
+    reviewGrid,
+    addReview,
     errors: null
   })
 }

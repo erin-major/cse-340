@@ -87,6 +87,49 @@ Util.buildDetailsGrid = async function (data) {
 }
 
 /* **************************************
+* Build the review view HTML
+* ************************************ */
+Util.buildReviewGrid = async function (data) {
+  let reviewGrid
+  reviewGrid = '<div id="inv-review-display">'
+  reviewGrid += '<h3>Customer Reviews</h3>'
+  if (data.length > 0) {
+    reviewGrid += '<ul>'
+    data.forEach((review) => {
+      let date = review.review_date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      })
+      reviewGrid += '<li>'
+      reviewGrid += `<p>${review.account_firstname[0]}${review.account_lastname} wrote on ${date}</p> <hr>`
+      reviewGrid += `<p>${review.review_text}</p> </li>`
+    })
+    reviewGrid += '</ul>'
+    
+  } else {
+    reviewGrid += '<p id="noReview">Be the first to write a review.</p>'
+  }
+  reviewGrid += '</div>'
+  return reviewGrid
+}
+
+/* **************************************
+* Build add review view HTML
+* ************************************ */
+Util.buildAddReview = async function (req, res) {
+  let addReview
+  addReview = '<div id="inv-add-review">'
+  if (res.locals.loggedin) {
+    addReview += '<p>Logged in!</p>'
+  } else {
+    addReview += '<p id="reviewLogin">You must <a href="/account/login">login</a> to write a review.</p>'
+  }
+  addReview += '</div>'
+  return addReview
+}
+
+/* **************************************
 * Build the classification list in inventory form
 * ************************************ */
 Util.buildClassificationList = async function (classification_id = null) {
