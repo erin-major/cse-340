@@ -59,4 +59,11 @@ router.post("/delete/",
     utilities.checkAccountType,
     utilities.handleErrors(invController.deleteInventory))
 
+// Process the add review data
+router.post("/review/add",
+    utilities.checkLogin,
+    invValidate.reviewRules(),
+    invValidate.checkReviewData,
+    utilities.handleErrors(invController.addReview))
+
 module.exports = router;

@@ -221,4 +221,65 @@ validate.checkUpdateData = async (req, res, next) => {
     next()
 }
 
+/*  **********************************
+  *  Add Review Data Validation Rules
+  * ********************************* */
+validate.reviewRules = () => {
+    return [
+
+        // screenName is required and must be a string
+        body("screenName", "Please provide a valid screen name.")
+            .trim()
+            .escape()
+            .notEmpty()
+            .bail()
+            .matches(/^[A-Za-z]+$/)
+            .bail()
+            .isLength({ min: 1 }),
+
+        // review_text is required and must be a string
+        body("review_text", "Please provide valid review text.")
+            .trim()
+            .notEmpty()
+            .bail()
+            .matches(/^[A-Za-z0-9\s.,!?'_\-:;+$]+$/)
+            .bail()
+            .isLength({ min: 5 })        
+    ]
+}
+
+/* ******************************
+ * Check data and return errors or continue to update inventory
+ * ***************************** */
+validate.checkReviewData = async (req, res, next) => {
+    const { screenName, review_text, inv_id, account_id } = req.body
+    let errors = []
+    errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        const data = await invModel.getDetailsByInventoryId(inv_id)
+        const grid = await utilities.buildDetailsGrid(data)
+        const reviewData = await invModel.getReviewsByInventoryId(inv_id)
+        const reviewGrid = await utilities.buildReviewGrid(reviewData)
+        const addReview = await utilities.buildAddReview(req, res)
+        let nav = await utilities.getNav()
+        let accountLink = await utilities.getAccountLink(req, res)
+        const vehicleName = data.inv_year + " " + data.inv_make + " " + data.inv_model
+        res.render("inventory/details", {
+            title: vehicleName,
+            nav,
+            accountLink,
+            grid,
+            reviewGrid,
+            addReview,
+            errors,
+            screenName,
+            review_text,
+            inv_id,
+            account_id
+        })
+        return
+    }
+    next()
+}
+
 module.exports = validate

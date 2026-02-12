@@ -334,5 +334,47 @@ invCont.deleteInventory = async function (req, res) {
   }
 }
 
+/* ****************************************
+*  Process add review
+* *************************************** */
+invCont.addReview = async function (req, res) {
+  const data = await invModel.getDetailsByInventoryId(inventory_id)
+  const grid = await utilities.buildDetailsGrid(data)
+  const reviewData = await invModel.getReviewsByInventoryId(inventory_id)
+  const reviewGrid = await utilities.buildReviewGrid(reviewData)
+  const addReview = await utilities.buildAddReview(req, res)
+  let nav = await utilities.getNav()
+  let accountLink = await utilities.getAccountLink(req, res)
+  const { screenName, review_text, inventory_id, account_id } = req.body
+  const addReviewResult = await invModel.addReview(
+    review_text,
+    inventory_id,
+    account_id
+  )
+
+  if (addReviewResult) {
+    req.flash(
+      "notice",
+      `Congratulations, you\'ve added a review.`)
+    res.redirect("/inv/detail/" + inventory_id)
+  } else {
+    req.flash("notice", "Sorry, adding the review failed.")
+    const vehicleName = data.inv_year + " " + data.inv_make + " " + data.inv_model
+    res.status(501).render("./inventory/details", {
+        title: vehicleName,
+        nav,
+        accountLink,
+        grid,
+        reviewGrid,
+        addReview,
+        account_id,
+        inventory_id,
+        screenName,
+        review_text,
+        errors: null
+    })
+  }
+}
+
 
 module.exports = invCont

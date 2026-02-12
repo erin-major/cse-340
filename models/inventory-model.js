@@ -161,4 +161,16 @@ async function deleteInventory(inv_id) {
   }
 }
 
-module.exports = { getClassifications, getInventoryByClassificationId, getDetailsByInventoryId, addClassification, checkExistingClassification, addInventory, checkExistingInventory, updateInventory, deleteInventory, getReviewsByInventoryId }
+/* *****************************
+*   Add new review
+* *************************** */
+async function addReview(review_text, inventory_id, account_id) {
+  try {
+    const sql = "INSERT INTO review (review_text, inventory_id, account_id) VALUES ($1,$2,$3) RETURNING *"
+    return await pool.query(sql, [review_text, inventory_id, account_id])
+  } catch (error) {
+    return error.message
+  }
+}
+
+module.exports = { getClassifications, getInventoryByClassificationId, getDetailsByInventoryId, addClassification, checkExistingClassification, addInventory, checkExistingInventory, updateInventory, deleteInventory, getReviewsByInventoryId, addReview }
