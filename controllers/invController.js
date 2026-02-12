@@ -31,7 +31,6 @@ invCont.buildByInventoryId = async function (req, res, next) {
   const grid = await utilities.buildDetailsGrid(data)
   const reviewData = await invModel.getReviewsByInventoryId(inv_id)
   const reviewGrid = await utilities.buildReviewGrid(reviewData)
-  const addReview = await utilities.buildAddReview(req, res)
   let nav = await utilities.getNav()
   let accountLink = await utilities.getAccountLink(req, res)
   const vehicleName = data.inv_year + " " + data.inv_make + " " + data.inv_model
@@ -41,8 +40,9 @@ invCont.buildByInventoryId = async function (req, res, next) {
     accountLink,
     grid,
     reviewGrid,
-    addReview,
     errors: null
+    // inv_id,
+    // account_id: res.locals.accountData?.account_id
   })
 }
 
@@ -338,7 +338,7 @@ invCont.deleteInventory = async function (req, res) {
 *  Process add review
 * *************************************** */
 invCont.addReview = async function (req, res) { 
-  const { screenName, review_text, inv_id, account_id } = req.body
+  const { review_text, inv_id, account_id } = req.body
   const addReviewResult = await invModel.addReview(
     review_text,
     inv_id,
@@ -356,7 +356,6 @@ invCont.addReview = async function (req, res) {
     const grid = await utilities.buildDetailsGrid(data)
     const reviewData = await invModel.getReviewsByInventoryId(inv_id)
     const reviewGrid = await utilities.buildReviewGrid(reviewData)
-    const addReview = await utilities.buildAddReview(req, res)
     let nav = await utilities.getNav()
     let accountLink = await utilities.getAccountLink(req, res)
     const vehicleName = data.inv_year + " " + data.inv_make + " " + data.inv_model
@@ -366,10 +365,8 @@ invCont.addReview = async function (req, res) {
         accountLink,
         grid,
         reviewGrid,
-        addReview,
         account_id,
         inv_id,
-        screenName,
         review_text,
         errors: null
     })

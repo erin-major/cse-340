@@ -252,7 +252,7 @@ validate.reviewRules = () => {
  * Check data and return errors or continue to update inventory
  * ***************************** */
 validate.checkReviewData = async (req, res, next) => {
-    const { screenName, review_text, inv_id, account_id } = req.body
+    const { review_text, inv_id, account_id } = req.body
     let errors = []
     errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -260,7 +260,6 @@ validate.checkReviewData = async (req, res, next) => {
         const grid = await utilities.buildDetailsGrid(data)
         const reviewData = await invModel.getReviewsByInventoryId(inv_id)
         const reviewGrid = await utilities.buildReviewGrid(reviewData)
-        const addReview = await utilities.buildAddReview(req, res, review_text, inv_id)
         let nav = await utilities.getNav()
         let accountLink = await utilities.getAccountLink(req, res)
         const vehicleName = data.inv_year + " " + data.inv_make + " " + data.inv_model
@@ -270,9 +269,7 @@ validate.checkReviewData = async (req, res, next) => {
             accountLink,
             grid,
             reviewGrid,
-            addReview,
-            errors,
-            screenName,
+            errors,            
             review_text,
             inv_id,
             account_id

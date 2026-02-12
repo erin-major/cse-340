@@ -18,4 +18,20 @@
 
     <%- grid %>
     <%- reviewGrid %>
-    <%- addReview %>
+
+    <% if (locals.loggedin) { %>
+        <h3>Add Your Own Review</h3>
+        <div class="add-review-form">
+            <form action="/inv/review/add" method="POST">
+                <label for="screenName">Screen Name:</label>
+                <input type="text" id="screenName" name="screenName" required readonly value="<%= accountData.account_firstname[0] + accountData.account_lastname %>">
+                <label for="review_text">Review:</label>
+                <textarea id="review_text" name="review_text" required rows="4"><%= locals.review_text %></textarea>
+                <input type="hidden" name="inv_id" value="<%= locals.inv_id %>">
+                <input type="hidden" name="account_id" value="<%= locals.account_id %>">                
+                <button type="submit">Submit Review</button>
+            </form>
+        </div>
+        <% } else { %>
+        <p id="reviewLogin">You must <a href="/account/login">login</a> to write a review.</p>
+        <% } %>
