@@ -40,9 +40,9 @@ invCont.buildByInventoryId = async function (req, res, next) {
     accountLink,
     grid,
     reviewGrid,
-    errors: null
-    // inv_id,
-    // account_id: res.locals.accountData?.account_id
+    errors: null,
+    inv_id: inv_id,
+    account_id: res.locals.accountData?.account_id
   })
 }
 

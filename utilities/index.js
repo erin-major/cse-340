@@ -102,7 +102,7 @@ Util.buildReviewGrid = async function (data) {
         day: "numeric"
       })
       reviewGrid += '<li>'
-      reviewGrid += `<p>${review.account_firstname[0]}${review.account_lastname} wrote on ${date}</p> <hr>`
+      reviewGrid += `<p><b>${review.account_firstname[0]}${review.account_lastname}</b> wrote on ${date}</p> <hr>`
       reviewGrid += `<p>${review.review_text}</p> </li>`
     })
     reviewGrid += '</ul>'
