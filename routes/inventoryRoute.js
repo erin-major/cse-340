@@ -9,7 +9,7 @@ const invValidate = require("../utilities/inventory-validation")
 router.get("/type/:classificationId", utilities.handleErrors(invController.buildByClassificationId));
 
 // Route to build details by inventory view
-router.get("/detail/:inventoryId", utilities.handleErrors(invController.buildByInventoryId));
+router.get("/detail/:inv_id", utilities.handleErrors(invController.buildByInventoryId));
 
 // Route to build inventory management view
 router.get("/", utilities.checkAccountType, utilities.handleErrors(invController.buildManagementView));
@@ -24,10 +24,10 @@ router.get("/add-inventory", utilities.checkAccountType, utilities.handleErrors(
 router.get("/getInventory/:classification_id", utilities.checkAccountType, utilities.handleErrors(invController.getInventoryJSON));
 
 // Route to build edit inventory view
-router.get("/edit/:inventoryId", utilities.checkAccountType, utilities.handleErrors(invController.buildEditInventoryView));
+router.get("/edit/:inv_id", utilities.checkAccountType, utilities.handleErrors(invController.buildEditInventoryView));
 
 // Route to build delete inventory view
-router.get("/delete/:inventoryId", utilities.checkAccountType, utilities.handleErrors(invController.buildDeleteInventoryView));
+router.get("/delete/:inv_id", utilities.checkAccountType, utilities.handleErrors(invController.buildDeleteInventoryView));
 
 // Process the add classification data
 router.post(

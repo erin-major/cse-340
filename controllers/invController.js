@@ -26,10 +26,10 @@ invCont.buildByClassificationId = async function (req, res, next) {
  *  Build details by inventory view
  * ************************** */
 invCont.buildByInventoryId = async function (req, res, next) {
-  const inventory_id = req.params.inventoryId
-  const data = await invModel.getDetailsByInventoryId(inventory_id)
+  const inv_id = req.params.inv_id
+  const data = await invModel.getDetailsByInventoryId(inv_id)
   const grid = await utilities.buildDetailsGrid(data)
-  const reviewData = await invModel.getReviewsByInventoryId(inventory_id)
+  const reviewData = await invModel.getReviewsByInventoryId(inv_id)
   const reviewGrid = await utilities.buildReviewGrid(reviewData)
   const addReview = await utilities.buildAddReview(req, res)
   let nav = await utilities.getNav()
@@ -205,8 +205,8 @@ invCont.getInventoryJSON = async (req, res, next) => {
 invCont.buildEditInventoryView = async function (req, res, next) {
   let nav = await utilities.getNav()
   let accountLink = await utilities.getAccountLink(req, res)
-  const inventory_id = parseInt(req.params.inventoryId)
-  const inventoryData = await invModel.getDetailsByInventoryId(inventory_id)
+  const inv_id = parseInt(req.params.inv_id)
+  const inventoryData = await invModel.getDetailsByInventoryId(inv_id)
   const name = inventoryData.inv_make + " " + inventoryData.inv_model
   const classificationList = await utilities.buildClassificationList(inventoryData.classification_id)
   res.render("./inventory/edit-inventory", {
@@ -287,8 +287,8 @@ invCont.updateInventory = async function (req, res) {
 invCont.buildDeleteInventoryView = async function (req, res, next) {
   let nav = await utilities.getNav()
   let accountLink = await utilities.getAccountLink(req, res)
-  const inventory_id = parseInt(req.params.inventoryId)
-  const inventoryData = await invModel.getDetailsByInventoryId(inventory_id)
+  const inv_id = parseInt(req.params.inv_id)
+  const inventoryData = await invModel.getDetailsByInventoryId(inv_id)
   const name = inventoryData.inv_make + " " + inventoryData.inv_model
   res.render("./inventory/delete-confirm", {
     title: "Delete Inventory - " + name,
@@ -337,18 +337,11 @@ invCont.deleteInventory = async function (req, res) {
 /* ****************************************
 *  Process add review
 * *************************************** */
-invCont.addReview = async function (req, res) {
-  const data = await invModel.getDetailsByInventoryId(inventory_id)
-  const grid = await utilities.buildDetailsGrid(data)
-  const reviewData = await invModel.getReviewsByInventoryId(inventory_id)
-  const reviewGrid = await utilities.buildReviewGrid(reviewData)
-  const addReview = await utilities.buildAddReview(req, res)
-  let nav = await utilities.getNav()
-  let accountLink = await utilities.getAccountLink(req, res)
-  const { screenName, review_text, inventory_id, account_id } = req.body
+invCont.addReview = async function (req, res) { 
+  const { screenName, review_text, inv_id, account_id } = req.body
   const addReviewResult = await invModel.addReview(
     review_text,
-    inventory_id,
+    inv_id,
     account_id
   )
 
@@ -356,9 +349,16 @@ invCont.addReview = async function (req, res) {
     req.flash(
       "notice",
       `Congratulations, you\'ve added a review.`)
-    res.redirect("/inv/detail/" + inventory_id)
+    res.redirect("/inv/detail/" + inv_id)
   } else {
     req.flash("notice", "Sorry, adding the review failed.")
+    const data = await invModel.getDetailsByInventoryId(inv_id)
+    const grid = await utilities.buildDetailsGrid(data)
+    const reviewData = await invModel.getReviewsByInventoryId(inv_id)
+    const reviewGrid = await utilities.buildReviewGrid(reviewData)
+    const addReview = await utilities.buildAddReview(req, res)
+    let nav = await utilities.getNav()
+    let accountLink = await utilities.getAccountLink(req, res)
     const vehicleName = data.inv_year + " " + data.inv_make + " " + data.inv_model
     res.status(501).render("./inventory/details", {
         title: vehicleName,
@@ -368,7 +368,7 @@ invCont.addReview = async function (req, res) {
         reviewGrid,
         addReview,
         account_id,
-        inventory_id,
+        inv_id,
         screenName,
         review_text,
         errors: null

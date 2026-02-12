@@ -117,9 +117,11 @@ Util.buildReviewGrid = async function (data) {
 /* **************************************
 * Build add review view HTML
 * ************************************ */
-Util.buildAddReview = async function (req, res) {
+Util.buildAddReview = async function (req, res, review_text = "", inv_id = null) {
   let addReview
   let screenName = res.locals.accountData.account_firstname[0] + res.locals.accountData.account_lastname 
+  // Use provided inv_id, fall back to req.params.inv_id, then req.body.inv_id
+  let inventoryId = inv_id || req.params.inv_id || req.body.inv_id
   addReview = '<div id="inv-add-review">'
   if (res.locals.loggedin) {
     addReview += '<h3>Add Your Own Review</h3>'
@@ -128,9 +130,9 @@ Util.buildAddReview = async function (req, res) {
     addReview += '<label for="screenName">Screen Name:</label>'
     addReview += `<input type="text" id="screenName" name="screenName" value="${screenName}" readonly>`
     addReview += '<label for="review_text">Review:</label>'
-    addReview += '<textarea id="review_text" name="review_text" required rows="4" value="<%= locals.review_text %>"></textarea>'
+    addReview += `<textarea id="review_text" name="review_text" required rows="4">${review_text}</textarea>`
     addReview += '<input type="submit" value="Submit Review">'
-    addReview += `<input type="hidden" name="inv_id" value="${req.params.inventoryId}">`
+    addReview += `<input type="hidden" name="inv_id" value="${inventoryId}">`
     addReview += `<input type="hidden" name="account_id" value="${res.locals.accountData.account_id}">`
     addReview += '</form>'
     addReview += '</div>'

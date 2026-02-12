@@ -26,14 +26,14 @@ async function getInventoryByClassificationId(classification_id) {
 }
 
 /* ***************************
- *  Get all details for an inventory items by inventory_id
+ *  Get all details for an inventory items by inv_id
  * ************************** */
-async function getDetailsByInventoryId(inventory_id) {
+async function getDetailsByInventoryId(inv_id) {
   try {
     const data = await pool.query(
       `SELECT * FROM public.inventory
       WHERE inv_id = $1`,
-      [inventory_id]
+      [inv_id]
     )
     return data.rows[0]
   } catch (error) {
@@ -42,9 +42,9 @@ async function getDetailsByInventoryId(inventory_id) {
 }
 
 /* ***************************
- *  Get all reviews for an inventory items by inventory_id
+ *  Get all reviews for an inventory items by inv_id
  * ************************** */
-async function getReviewsByInventoryId(inventory_id) {
+async function getReviewsByInventoryId(inv_id) {
   try {
     const data = await pool.query(
       `SELECT r.review_id, r.review_text, r.review_date, a.account_firstname, a.account_lastname FROM public.review AS r
@@ -52,7 +52,7 @@ async function getReviewsByInventoryId(inventory_id) {
       ON r.account_id = a.account_id
       WHERE inv_id = $1
       ORDER BY r.review_date DESC`,
-      [inventory_id]
+      [inv_id]
     )
     return data.rows
   } catch (error) {
@@ -164,10 +164,10 @@ async function deleteInventory(inv_id) {
 /* *****************************
 *   Add new review
 * *************************** */
-async function addReview(review_text, inventory_id, account_id) {
+async function addReview(review_text, inv_id, account_id) {
   try {
-    const sql = "INSERT INTO review (review_text, inventory_id, account_id) VALUES ($1,$2,$3) RETURNING *"
-    return await pool.query(sql, [review_text, inventory_id, account_id])
+    const sql = "INSERT INTO review (review_text, inv_id, account_id) VALUES ($1,$2,$3) RETURNING *"
+    return await pool.query(sql, [review_text, inv_id, account_id])
   } catch (error) {
     return error.message
   }
