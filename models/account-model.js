@@ -110,5 +110,4 @@ async function updatePassword(
   }
 }
 
-
 module.exports = { registerAccount, checkExistingEmail, checkExistingEmailDiffAccount, getAccountByEmail, getAccountById, updateAccount, updatePassword }

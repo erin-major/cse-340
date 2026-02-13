@@ -171,6 +171,26 @@ Util.buildAccountManagement = async function (req, res, next) {
   return grid
 }
 
+/* ************************
+ * Build User Reviews
+ ************************** */
+Util.buildUserReviews = async function (data) {
+  let reviews
+  if (data.length > 0) {
+    reviews = '<ol class="reviews-list">'
+    data.forEach((row) => { 
+      let date = row.review_date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      })
+      reviews += `<li> Reviewed the ${row.inv_year} ${row.inv_make} ${row.inv_model} on ${date} | <a href="/inv/review/edit/${row.review_id}" title="Click to update">Edit</a> | <a href="/inv/review/delete/${row.review_id}" title="Click to delete">Delete</a></li>`
+    })
+    reviews += '</ol>'
+  } 
+  return reviews
+}
+
 /* ****************************************
  * Middleware For Handling Errors
  * Wrap other function in this for 

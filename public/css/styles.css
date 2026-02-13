@@ -358,11 +358,11 @@ th, td {
   padding: 5px;
 }
 
-#inventoryDisplay a, #reviewLogin a {
+#inventoryDisplay a, #reviewLogin a, .reviews-list a {
   color: var(--dark-color);
 }
 
-#inventoryDisplay a:hover, #editAccount:hover, #manageInv:hover {
+#inventoryDisplay a:hover, #editAccount:hover, #manageInv:hover, .reviews-list a:hover {
   color: var(--primary-color);
 }
 
@@ -401,12 +401,12 @@ hr {
   max-width: 90%;
 }
 
-#reviewLogin, #noReview {
+#reviewLogin, #noReview, .reviews-list {
   margin-left: 2.5rem;
   font-size: 1.1rem;
 }
 
-#inv-review-display li {
+#inv-review-display li, .reviews-list li {
   margin-bottom: 1rem;
 }
 

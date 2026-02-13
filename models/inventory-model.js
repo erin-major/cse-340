@@ -61,6 +61,20 @@ async function getReviewsByInventoryId(inv_id) {
 }
 
 /* *****************************
+* Get all reviews by account_id
+* ***************************** */
+async function getReviewsByAccountId(account_id) {
+  try {
+    const result = await pool.query(
+      'SELECT r.review_id, r.review_text, r.review_date, r.account_id, i.inv_year, i.inv_make, i.inv_model FROM review AS r INNER JOIN inventory AS i ON r.inv_id = i.inv_id WHERE r.account_id = $1 ORDER BY r.review_date DESC',
+      [account_id])
+    return result.rows
+  } catch (error) {
+    return new Error("No matching reviews found")
+  }
+}
+
+/* *****************************
 *   Add new classification
 * *************************** */
 async function addClassification(classification_name) {
@@ -173,4 +187,4 @@ async function addReview(review_text, inv_id, account_id) {
   }
 }
 
-module.exports = { getClassifications, getInventoryByClassificationId, getDetailsByInventoryId, addClassification, checkExistingClassification, addInventory, checkExistingInventory, updateInventory, deleteInventory, getReviewsByInventoryId, addReview }
+module.exports = { getClassifications, getInventoryByClassificationId, getDetailsByInventoryId, addClassification, checkExistingClassification, addInventory, checkExistingInventory, updateInventory, deleteInventory, getReviewsByInventoryId, getReviewsByAccountId, addReview }
