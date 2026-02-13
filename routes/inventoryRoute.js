@@ -29,6 +29,12 @@ router.get("/edit/:inv_id", utilities.checkAccountType, utilities.handleErrors(i
 // Route to build delete inventory view
 router.get("/delete/:inv_id", utilities.checkAccountType, utilities.handleErrors(invController.buildDeleteInventoryView));
 
+// Route to build edit review view
+router.get("/review/edit/:review_id", utilities.checkLogin, utilities.handleErrors(invController.buildEditReviewView));
+
+// Route to build delete review view
+router.get("/review/delete/:review_id", utilities.checkLogin, utilities.handleErrors(invController.buildDeleteReviewView));
+
 // Process the add classification data
 router.post(
     "/add-classification",

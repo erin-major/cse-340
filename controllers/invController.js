@@ -303,6 +303,61 @@ invCont.buildDeleteInventoryView = async function (req, res, next) {
   })
 }
 
+/* ***************************
+ *  Build Edit Review View
+ * ************************** */
+invCont.buildEditReviewView = async function (req, res, next) {
+  let nav = await utilities.getNav()
+  let accountLink = await utilities.getAccountLink(req, res)
+  const review_id = parseInt(req.params.review_id)
+  const reviewData = await invModel.getReviewByReviewId(review_id)
+  let reviewDate = reviewData.review_date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  })
+  let vehicleName = reviewData.inv_year + " " + reviewData.inv_make + " " + reviewData.inv_model
+  res.render("./inventory/review/edit", {
+    title: "Edit " + vehicleName + " Review",
+    nav,
+    accountLink,
+    errors: null,
+    account_id: reviewData.account_id,
+    inv_id: reviewData.inv_id,
+    review_id: reviewData.review_id,
+    review_text: reviewData.review_text,
+    review_date: reviewDate
+  })
+}
+
+/* ***************************
+ *  Build Delete Review View
+ * ************************** */
+invCont.buildDeleteReviewView = async function (req, res, next) {
+  let nav = await utilities.getNav()
+  let accountLink = await utilities.getAccountLink(req, res)
+  const review_id = parseInt(req.params.review_id)
+  const reviewData = await invModel.getReviewByReviewId(review_id)
+  let reviewDate = reviewData.review_date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  })
+  let vehicleName = reviewData.inv_year + " " + reviewData.inv_make + " " + reviewData.inv_model
+  res.render("./inventory/review/delete", {
+    title: "Delete " + vehicleName + " Review",
+    nav,
+    accountLink,
+    errors: null,
+    account_id: reviewData.account_id,
+    inv_id: reviewData.inv_id,
+    review_date: reviewDate,
+    review_id: reviewData.review_id,
+    review_text: reviewData.review_text
+  })
+}
+
+
 /* ****************************************
 *  Process delete inventory
 * *************************************** */
