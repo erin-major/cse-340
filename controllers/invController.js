@@ -450,6 +450,11 @@ invCont.editReview = async function (req, res) {
     res.redirect("/account/")
   } else {
     let vehicleName = reviewData.inv_year + " " + reviewData.inv_make + " " + reviewData.inv_model
+    let reviewDate = reviewData.review_date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    })
     res.render("./inventory/review/edit", {
       title: "Edit " + vehicleName + " Review",
       nav,
