@@ -72,4 +72,18 @@ router.post("/review/add",
     invValidate.checkReviewData,
     utilities.handleErrors(invController.addReview))
 
+// Process the edit review data
+router.post("/review/edit",
+    utilities.checkLogin,
+    utilities.checkReviewAccountMatch,
+    invValidate.reviewRules(),
+    invValidate.checkReviewData,
+    utilities.handleErrors(invController.editReview))
+
+// Process the delete review data
+router.post("/review/delete",
+    utilities.checkLogin,
+    utilities.checkReviewAccountMatch,
+    utilities.handleErrors(invController.deleteReview))
+
 module.exports = router;

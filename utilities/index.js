@@ -272,6 +272,24 @@ Util.checkAccountMatch = (req, res, next) => {
 }
 
 /* ****************************************
+ *  Check Edit Review Account Match
+ * ************************************ */
+Util.checkReviewAccountMatch = (req, res, next) => {
+  let req_account_id = parseInt(req.body.account_id)
+  if (res.locals.loggedin) {
+    if (res.locals.accountData.account_id === req_account_id) {
+      next()
+    } else {
+      req.flash("notice", "Insufficient permissions.")
+      return res.redirect("/account/")
+    }
+  } else {
+    req.flash("notice", "Please log in.")
+    return res.redirect("/account/login")
+  }
+}
+
+/* ****************************************
  *  Check account type
  * ************************************ */
 Util.checkAccountType = (req, res, next) => {

@@ -226,17 +226,6 @@ validate.checkUpdateData = async (req, res, next) => {
   * ********************************* */
 validate.reviewRules = () => {
     return [
-
-        // screenName is required and must be a string
-        body("screenName", "Please provide a valid screen name.")
-            .trim()
-            .escape()
-            .notEmpty()
-            .bail()
-            .matches(/^[A-Za-z]+$/)
-            .bail()
-            .isLength({ min: 1 }),
-
         // review_text is required and must be a string
         body("review_text", "Please provide valid review text.")
             .trim()

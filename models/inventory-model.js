@@ -177,6 +177,23 @@ async function updateInventory(
 }
 
 /* ***************************
+ *  Update Review Data
+ * ************************** */
+async function updateReview(
+  review_id,
+  review_text  
+) {
+  try {
+    const sql =
+      "UPDATE review SET review_text = $1 WHERE review_id = $2 RETURNING *"
+    const data = await pool.query(sql, [review_text, review_id])
+    return data.rows[0]
+  } catch (error) {
+    console.error("model error: " + error)
+  }
+}
+
+/* ***************************
  *  Delete Inventory Data
  * ************************** */
 async function deleteInventory(inv_id) {
@@ -188,6 +205,20 @@ async function deleteInventory(inv_id) {
     console.error("model error: " + error)
   }
 }
+
+/* ***************************
+ *  Delete Review Data
+ * ************************** */
+async function deleteReview(review_id) {
+  try {
+    const sql = 'DELETE FROM review WHERE review_id = $1'
+    const data = await pool.query(sql, [review_id])
+    return data
+  } catch (error) {
+    console.error("model error: " + error)
+  }
+}
+
 
 /* *****************************
 *   Add new review
@@ -201,4 +232,4 @@ async function addReview(review_text, inv_id, account_id) {
   }
 }
 
-module.exports = { getClassifications, getInventoryByClassificationId, getDetailsByInventoryId, addClassification, checkExistingClassification, addInventory, checkExistingInventory, updateInventory, deleteInventory, getReviewsByInventoryId, getReviewsByAccountId, addReview, getReviewByReviewId }
+module.exports = { getClassifications, getInventoryByClassificationId, getDetailsByInventoryId, addClassification, checkExistingClassification, addInventory, checkExistingInventory, updateInventory, deleteInventory, getReviewsByInventoryId, getReviewsByAccountId, addReview, getReviewByReviewId, updateReview, deleteReview }
