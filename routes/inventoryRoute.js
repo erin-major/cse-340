@@ -77,7 +77,7 @@ router.post("/review/edit",
     utilities.checkLogin,
     utilities.checkReviewAccountMatch,
     invValidate.reviewRules(),
-    invValidate.checkReviewData,
+    invValidate.checkEditReviewData,
     utilities.handleErrors(invController.editReview))
 
 // Process the delete review data

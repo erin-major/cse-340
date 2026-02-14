@@ -268,4 +268,37 @@ validate.checkReviewData = async (req, res, next) => {
     next()
 }
 
+/* ******************************
+ * Check data and return errors or continue to update inventory
+ * ***************************** */
+validate.checkEditReviewData = async (req, res, next) => {
+    const { review_text, inv_id, account_id, review_id } = req.body
+    let errors = []
+    errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        let nav = await utilities.getNav()
+        let accountLink = await utilities.getAccountLink(req, res)
+        const reviewData = await invModel.getReviewByReviewId(review_id)        
+        let vehicleName = reviewData.inv_year + " " + reviewData.inv_make + " " + reviewData.inv_model
+        let reviewDate = reviewData.review_date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        })
+        res.render("./inventory/review/edit", {
+            title: "Edit " + vehicleName + " Review",
+            nav,
+            accountLink,
+            errors,
+            account_id: account_id,
+            inv_id,
+            review_id,
+            review_text,
+            review_date: reviewDate
+        })
+        return
+    }
+    next()
+}
+
 module.exports = validate
