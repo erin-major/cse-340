@@ -26,9 +26,11 @@ invCont.buildByClassificationId = async function (req, res, next) {
  *  Build details by inventory view
  * ************************** */
 invCont.buildByInventoryId = async function (req, res, next) {
-  const inventory_id = req.params.inventoryId
-  const data = await invModel.getDetailsByInventoryId(inventory_id)
+  const inv_id = req.params.inv_id
+  const data = await invModel.getDetailsByInventoryId(inv_id)
   const grid = await utilities.buildDetailsGrid(data)
+  const reviewData = await invModel.getReviewsByInventoryId(inv_id)
+  const reviewGrid = await utilities.buildReviewGrid(reviewData)
   let nav = await utilities.getNav()
   let accountLink = await utilities.getAccountLink(req, res)
   const vehicleName = data.inv_year + " " + data.inv_make + " " + data.inv_model
@@ -37,7 +39,10 @@ invCont.buildByInventoryId = async function (req, res, next) {
     nav,
     accountLink,
     grid,
-    errors: null
+    reviewGrid,
+    errors: null,
+    inv_id: inv_id,
+    account_id: res.locals.accountData?.account_id
   })
 }
 
@@ -200,8 +205,8 @@ invCont.getInventoryJSON = async (req, res, next) => {
 invCont.buildEditInventoryView = async function (req, res, next) {
   let nav = await utilities.getNav()
   let accountLink = await utilities.getAccountLink(req, res)
-  const inventory_id = parseInt(req.params.inventoryId)
-  const inventoryData = await invModel.getDetailsByInventoryId(inventory_id)
+  const inv_id = parseInt(req.params.inv_id)
+  const inventoryData = await invModel.getDetailsByInventoryId(inv_id)
   const name = inventoryData.inv_make + " " + inventoryData.inv_model
   const classificationList = await utilities.buildClassificationList(inventoryData.classification_id)
   res.render("./inventory/edit-inventory", {
@@ -282,8 +287,8 @@ invCont.updateInventory = async function (req, res) {
 invCont.buildDeleteInventoryView = async function (req, res, next) {
   let nav = await utilities.getNav()
   let accountLink = await utilities.getAccountLink(req, res)
-  const inventory_id = parseInt(req.params.inventoryId)
-  const inventoryData = await invModel.getDetailsByInventoryId(inventory_id)
+  const inv_id = parseInt(req.params.inv_id)
+  const inventoryData = await invModel.getDetailsByInventoryId(inv_id)
   const name = inventoryData.inv_make + " " + inventoryData.inv_model
   res.render("./inventory/delete-confirm", {
     title: "Delete Inventory - " + name,
@@ -297,6 +302,61 @@ invCont.buildDeleteInventoryView = async function (req, res, next) {
     inv_price: inventoryData.inv_price,
   })
 }
+
+/* ***************************
+ *  Build Edit Review View
+ * ************************** */
+invCont.buildEditReviewView = async function (req, res, next) {
+  let nav = await utilities.getNav()
+  let accountLink = await utilities.getAccountLink(req, res)
+  const review_id = parseInt(req.params.review_id)
+  const reviewData = await invModel.getReviewByReviewId(review_id)
+  let reviewDate = reviewData.review_date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  })
+  let vehicleName = reviewData.inv_year + " " + reviewData.inv_make + " " + reviewData.inv_model
+  res.render("./inventory/review/edit", {
+    title: "Edit " + vehicleName + " Review",
+    nav,
+    accountLink,
+    errors: null,
+    account_id: reviewData.account_id,
+    inv_id: reviewData.inv_id,
+    review_id: reviewData.review_id,
+    review_text: reviewData.review_text,
+    review_date: reviewDate
+  })
+}
+
+/* ***************************
+ *  Build Delete Review View
+ * ************************** */
+invCont.buildDeleteReviewView = async function (req, res, next) {
+  let nav = await utilities.getNav()
+  let accountLink = await utilities.getAccountLink(req, res)
+  const review_id = parseInt(req.params.review_id)
+  const reviewData = await invModel.getReviewByReviewId(review_id)
+  let reviewDate = reviewData.review_date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  })
+  let vehicleName = reviewData.inv_year + " " + reviewData.inv_make + " " + reviewData.inv_model
+  res.render("./inventory/review/delete", {
+    title: "Delete " + vehicleName + " Review",
+    nav,
+    accountLink,
+    errors: null,
+    account_id: reviewData.account_id,
+    inv_id: reviewData.inv_id,
+    review_date: reviewDate,
+    review_id: reviewData.review_id,
+    review_text: reviewData.review_text
+  })
+}
+
 
 /* ****************************************
 *  Process delete inventory
@@ -329,5 +389,115 @@ invCont.deleteInventory = async function (req, res) {
   }
 }
 
+/* ****************************************
+*  Process add review
+* *************************************** */
+invCont.addReview = async function (req, res) { 
+  const { review_text, inv_id, account_id } = req.body
+  const addReviewResult = await invModel.addReview(
+    review_text,
+    inv_id,
+    account_id
+  )
+
+  if (addReviewResult) {
+    req.flash(
+      "notice",
+      `Congratulations, you\'ve added a review.`)
+    res.redirect("/inv/detail/" + inv_id)
+  } else {
+    req.flash("notice", "Sorry, adding the review failed.")
+    const data = await invModel.getDetailsByInventoryId(inv_id)
+    const grid = await utilities.buildDetailsGrid(data)
+    const reviewData = await invModel.getReviewsByInventoryId(inv_id)
+    const reviewGrid = await utilities.buildReviewGrid(reviewData)
+    let nav = await utilities.getNav()
+    let accountLink = await utilities.getAccountLink(req, res)
+    const vehicleName = data.inv_year + " " + data.inv_make + " " + data.inv_model
+    res.status(501).render("./inventory/details", {
+        title: vehicleName,
+        nav,
+        accountLink,
+        grid,
+        reviewGrid,
+        account_id,
+        inv_id,
+        review_text,
+        errors: null
+    })
+  }
+}
+
+/* ****************************************
+*  Process edit review
+* *************************************** */
+invCont.editReview = async function (req, res) {
+  const review_id = parseInt(req.body.review_id)
+  let nav = await utilities.getNav()
+  let accountLink = await utilities.getAccountLink(req, res)
+  const { review_text, inv_id, account_id } = req.body
+  const updateResult = await invModel.updateReview(
+    review_id,
+    review_text,
+    inv_id,
+    account_id
+  )
+
+  if (updateResult) {
+    req.flash(
+      "notice",
+      `Congratulations, you\'ve updated your review.`)
+    res.redirect("/account/")
+  } else {
+    let vehicleName = reviewData.inv_year + " " + reviewData.inv_make + " " + reviewData.inv_model
+    res.render("./inventory/review/edit", {
+      title: "Edit " + vehicleName + " Review",
+      nav,
+      accountLink,
+      errors: null,
+      account_id: reviewData.account_id,
+      inv_id: reviewData.inv_id,
+      review_id: reviewData.review_id,
+      review_text: reviewData.review_text,
+      review_date: reviewDate
+    })
+  }
+}
+
+/* ****************************************
+*  Process delete review
+* *************************************** */
+invCont.deleteReview = async function (req, res) {
+  const review_id = parseInt(req.body.review_id)
+  let nav = await utilities.getNav()
+  let accountLink = await utilities.getAccountLink(req, res)
+  const deleteResult = await invModel.deleteReview(review_id)
+
+  if (deleteResult) {
+    req.flash(
+      "notice",
+      `Congratulations, you\'ve deleted the review.`)
+    res.redirect("/account/")
+  } else {
+    req.flash("notice", "Sorry, deleting the review failed.")
+    let vehicleName = reviewData.inv_year + " " + reviewData.inv_make + " " + reviewData.inv_model
+    let reviewDate = reviewData.review_date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    })
+    res.status(501).render("./inventory/review/delete", {
+      title: "Delete " + vehicleName + " Review",
+      nav,
+      accountLink,
+      errors: null,
+      account_id: reviewData.account_id,
+      inv_id: reviewData.inv_id,
+      review_date: reviewDate,
+      review_id: reviewData.review_id,
+      review_text: reviewData.review_text
+    })
+  }
+}
 
 module.exports = invCont

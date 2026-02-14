@@ -242,7 +242,7 @@ h2, h3 {
   font-size: 1.2rem;
 }
 
-.login-form, .register-form, .classification-form, .inventory-form, .edit-account-form, .edit-password-form {
+.login-form, .register-form, .classification-form, .inventory-form, .edit-account-form, .edit-password-form, .add-review-form, .edit-review-form, .delete-review-form {
   margin: 0 auto;
   padding: 1rem;
   border: 2px solid var(--tertiary-color);
@@ -250,6 +250,10 @@ h2, h3 {
   box-shadow: var(--dark-color) 0px 5px 15px;
   width: 90%;
   max-width: 600px;
+}
+
+.add-review-form {
+  max-width: 90%;
 }
 
 form {
@@ -332,7 +336,7 @@ footer a:visited, .login-form a:visited, .management:visited {
   font-size: 1.3rem;
 }
 
-.management:hover {
+.management:hover, #reviewLogin a:hover {
   color: var(--secondary-color);
 }
 
@@ -354,11 +358,11 @@ th, td {
   padding: 5px;
 }
 
-#inventoryDisplay a {
+#inventoryDisplay a, #reviewLogin a, .reviews-list a {
   color: var(--dark-color);
 }
 
-#inventoryDisplay a:hover, #editAccount:hover, #manageInv:hover {
+#inventoryDisplay a:hover, #editAccount:hover, #manageInv:hover, .reviews-list a:hover {
   color: var(--primary-color);
 }
 
@@ -383,6 +387,27 @@ th, td {
   color: var(--dark-color);
   margin: 0rem 1rem 1.4rem;
   font-size: 1.2rem;
+}
+
+#inv-review-display li p {
+  margin: 0rem;
+  font-size: 1.1rem;
+}
+
+hr {
+  height: 5px;
+  background-color: var(--secondary-color);
+  margin: 0rem 0rem;
+  max-width: 90%;
+}
+
+#reviewLogin, #noReview, .reviews-list {
+  margin-left: 2.5rem;
+  font-size: 1.1rem;
+}
+
+#inv-review-display li, .reviews-list li {
+  margin-bottom: 1rem;
 }
 
 footer {

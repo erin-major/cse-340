@@ -21,23 +21,70 @@ async function getInventoryByClassificationId(classification_id) {
     )
     return data.rows
   } catch (error) {
-    console.error("getclassificationsbyid error " + error)
+    console.error("getInventoryByClassificationId error " + error)
   }
 }
 
 /* ***************************
- *  Get all details for an inventory items by inventory_id
+ *  Get all details for an inventory items by inv_id
  * ************************** */
-async function getDetailsByInventoryId(inventory_id) {
+async function getDetailsByInventoryId(inv_id) {
   try {
     const data = await pool.query(
       `SELECT * FROM public.inventory
       WHERE inv_id = $1`,
-      [inventory_id]
+      [inv_id]
     )
     return data.rows[0]
   } catch (error) {
     console.error("getDetailsByInventoryId error " + error)
+  }
+}
+
+/* ***************************
+ *  Get all reviews for an inventory items by inv_id
+ * ************************** */
+async function getReviewsByInventoryId(inv_id) {
+  try {
+    const data = await pool.query(
+      `SELECT r.review_id, r.review_text, r.review_date, a.account_firstname, a.account_lastname FROM public.review AS r
+      INNER JOIN public.account AS a
+      ON r.account_id = a.account_id
+      WHERE inv_id = $1
+      ORDER BY r.review_date DESC`,
+      [inv_id]
+    )
+    return data.rows
+  } catch (error) {
+    console.error("getReviewsByInventoryId error " + error)
+  }
+}
+
+/* *****************************
+* Get all reviews by account_id
+* ***************************** */
+async function getReviewsByAccountId(account_id) {
+  try {
+    const result = await pool.query(
+      'SELECT r.review_id, r.review_text, r.review_date, r.account_id, i.inv_year, i.inv_make, i.inv_model FROM review AS r INNER JOIN inventory AS i ON r.inv_id = i.inv_id WHERE r.account_id = $1 ORDER BY r.review_date DESC',
+      [account_id])
+    return result.rows
+  } catch (error) {
+    return new Error("No matching reviews found")
+  }
+}
+
+/* *****************************
+* Get review by review_id
+* ***************************** */
+async function getReviewByReviewId(review_id) {
+  try {
+    const result = await pool.query(
+      'SELECT r.review_id, r.review_text, r.review_date, r.account_id, r.inv_id, i.inv_year, i.inv_make, i.inv_model FROM review AS r INNER JOIN inventory AS i ON r.inv_id = i.inv_id WHERE r.review_id = $1',
+      [review_id])
+    return result.rows[0]
+  } catch (error) {
+    return new Error("getReviewByReviewId error " + error)
   }
 }
 
@@ -130,6 +177,23 @@ async function updateInventory(
 }
 
 /* ***************************
+ *  Update Review Data
+ * ************************** */
+async function updateReview(
+  review_id,
+  review_text  
+) {
+  try {
+    const sql =
+      "UPDATE review SET review_text = $1 WHERE review_id = $2 RETURNING *"
+    const data = await pool.query(sql, [review_text, review_id])
+    return data.rows[0]
+  } catch (error) {
+    console.error("model error: " + error)
+  }
+}
+
+/* ***************************
  *  Delete Inventory Data
  * ************************** */
 async function deleteInventory(inv_id) {
@@ -142,4 +206,30 @@ async function deleteInventory(inv_id) {
   }
 }
 
-module.exports = { getClassifications, getInventoryByClassificationId, getDetailsByInventoryId, addClassification, checkExistingClassification, addInventory, checkExistingInventory, updateInventory, deleteInventory }
+/* ***************************
+ *  Delete Review Data
+ * ************************** */
+async function deleteReview(review_id) {
+  try {
+    const sql = 'DELETE FROM review WHERE review_id = $1'
+    const data = await pool.query(sql, [review_id])
+    return data
+  } catch (error) {
+    console.error("model error: " + error)
+  }
+}
+
+
+/* *****************************
+*   Add new review
+* *************************** */
+async function addReview(review_text, inv_id, account_id) {
+  try {
+    const sql = "INSERT INTO review (review_text, inv_id, account_id) VALUES ($1,$2,$3) RETURNING *"
+    return await pool.query(sql, [review_text, inv_id, account_id])
+  } catch (error) {
+    return error.message
+  }
+}
+
+module.exports = { getClassifications, getInventoryByClassificationId, getDetailsByInventoryId, addClassification, checkExistingClassification, addInventory, checkExistingInventory, updateInventory, deleteInventory, getReviewsByInventoryId, getReviewsByAccountId, addReview, getReviewByReviewId, updateReview, deleteReview }

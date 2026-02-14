@@ -87,6 +87,34 @@ Util.buildDetailsGrid = async function (data) {
 }
 
 /* **************************************
+* Build the review view HTML
+* ************************************ */
+Util.buildReviewGrid = async function (data) {
+  let reviewGrid
+  reviewGrid = '<div id="inv-review-display">'
+  reviewGrid += '<h3>Customer Reviews</h3>'
+  if (data.length > 0) {
+    reviewGrid += '<ul>'
+    data.forEach((review) => {
+      let date = review.review_date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      })
+      reviewGrid += '<li>'
+      reviewGrid += `<p><b>${review.account_firstname[0]}${review.account_lastname}</b> wrote on ${date}</p> <hr>`
+      reviewGrid += `<p>${review.review_text}</p> </li>`
+    })
+    reviewGrid += '</ul>'
+
+  } else {
+    reviewGrid += '<p id="noReview">Be the first to write a review.</p>'
+  }
+  reviewGrid += '</div>'
+  return reviewGrid
+}
+
+/* **************************************
 * Build the classification list in inventory form
 * ************************************ */
 Util.buildClassificationList = async function (classification_id = null) {
@@ -141,6 +169,26 @@ Util.buildAccountManagement = async function (req, res, next) {
     grid += `<a href=/inv title='Click to manage inventory' id='manageInv'>Manage Inventory</a>`
   }
   return grid
+}
+
+/* ************************
+ * Build User Reviews
+ ************************** */
+Util.buildUserReviews = async function (data) {
+  let reviews
+  if (data.length > 0) {
+    reviews = '<ol class="reviews-list">'
+    data.forEach((row) => { 
+      let date = row.review_date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      })
+      reviews += `<li> Reviewed the ${row.inv_year} ${row.inv_make} ${row.inv_model} on ${date} | <a href="/inv/review/edit/${row.review_id}" title="Click to update">Edit</a> | <a href="/inv/review/delete/${row.review_id}" title="Click to delete">Delete</a></li>`
+    })
+    reviews += '</ol>'
+  } 
+  return reviews
 }
 
 /* ****************************************
@@ -210,6 +258,24 @@ Util.checkLogin = (req, res, next) => {
  * ************************************ */
 Util.checkAccountMatch = (req, res, next) => {
   let req_account_id = parseInt(req.params.account_id)
+  if (res.locals.loggedin) {
+    if (res.locals.accountData.account_id === req_account_id) {
+      next()
+    } else {
+      req.flash("notice", "Insufficient permissions.")
+      return res.redirect("/account/")
+    }
+  } else {
+    req.flash("notice", "Please log in.")
+    return res.redirect("/account/login")
+  }
+}
+
+/* ****************************************
+ *  Check Edit Review Account Match
+ * ************************************ */
+Util.checkReviewAccountMatch = (req, res, next) => {
+  let req_account_id = parseInt(req.body.account_id)
   if (res.locals.loggedin) {
     if (res.locals.accountData.account_id === req_account_id) {
       next()

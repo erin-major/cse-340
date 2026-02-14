@@ -1,0 +1,31 @@
+<% if (title) { %>
+    <h1>
+        <%= title %>
+    </h1>
+    <% } else { res.redirect('/') } %>
+
+        <% if (errors) { %>
+            <ul class="notice">
+                <% errors.array().forEach(error=> { %>
+                    <li>
+                        <%= error.msg %>
+                    </li>
+                    <% }) %>
+            </ul>
+            <% } %>
+                <div class="delete-review-form">
+                    <form action="/inv/review/delete" method="POST">
+                        <p id="confirmDelete">Confirm deletion: THIS DELETE CANNOT BE UNDONE!</p><br>
+                        <label for="review_date">Review Date:</label><br>
+                        <input type="text" id="review_date" name="review_date" required readonly
+                            value="<%= locals.review_date %>"><br>
+                        <label for="review_text">Review:</label><br>
+                        <textarea id="review_text" name="review_text" required readonly
+                            rows="4"><%= locals.review_text %></textarea><br>
+                        <input type="hidden" name="inv_id" value="<%= locals.inv_id %>">
+                        <input type="hidden" name="account_id" value="<%= locals.account_id %>">
+                        <input type="hidden" name="review_id" value="<%= locals.review_id %>">
+                        <input type="submit" value="Delete Review">
+
+                    </form>
+                </div>
